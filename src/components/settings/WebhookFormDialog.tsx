@@ -18,7 +18,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
-const SUPABASE_URL = "https://pomueweeulenslxvsxar.supabase.co";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
 
 const SYSTEM_FIELDS = [
   { value: "helpdesk_clients.name", label: "Cliente - Nome" },

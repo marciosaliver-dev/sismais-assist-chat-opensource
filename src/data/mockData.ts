@@ -128,8 +128,8 @@ export const mockAISuggestions: AISuggestion[] = [
 ];
 
 export const mockAgents = [
-  { id: "1", name: "João Atendente", email: "joao@sismais.com", role: "Atendente" },
-  { id: "2", name: "Ana Suporte", email: "ana@sismais.com", role: "Atendente" },
-  { id: "3", name: "Carlos Admin", email: "carlos@sismais.com", role: "Administrador" },
+  { id: "1", name: "João Atendente", email: "joao@suaempresa.com", role: "Atendente" },
+  { id: "2", name: "Ana Suporte", email: "ana@suaempresa.com", role: "Atendente" },
+  { id: "3", name: "Carlos Admin", email: "carlos@suaempresa.com", role: "Administrador" },
 ];
 

@@ -10,6 +10,13 @@ import { MainLayout } from "@/components/layout/MainLayout"
 import { Spinner } from "@/components/ui/spinner"
 import { SpeedInsights } from "@vercel/speed-insights/react"
 import { ErrorBoundary } from "@/components/ErrorBoundary"
+import { SetupWizard } from "@/components/SetupWizard/SetupWizard"
+
+// Verifica se as variáveis de ambiente obrigatórias estão configuradas
+const isConfigured = Boolean(
+  import.meta.env.VITE_SUPABASE_URL &&
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
+)
 
 // Lazy-loaded pages
 const Login = lazyRetry(() => import("./pages/Login"))
@@ -273,20 +280,26 @@ function AppRoutes() {
   )
 }
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          <ErrorBoundary>
-            <AppRoutes />
-          </ErrorBoundary>
-        </AuthProvider>
-      </BrowserRouter>
-      <SpeedInsights />
-    </TooltipProvider>
-  </QueryClientProvider>
-)
+const App = () => {
+  if (!isConfigured) {
+    return <SetupWizard />
+  }
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Sonner />
+        <BrowserRouter>
+          <AuthProvider>
+            <ErrorBoundary>
+              <AppRoutes />
+            </ErrorBoundary>
+          </AuthProvider>
+        </BrowserRouter>
+        <SpeedInsights />
+      </TooltipProvider>
+    </QueryClientProvider>
+  )
+}
 
 export default App

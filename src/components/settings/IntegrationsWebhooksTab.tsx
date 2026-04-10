@@ -10,7 +10,7 @@ import { PlatformAIAssistant } from "@/components/settings/PlatformAIAssistant";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
-const SUPABASE_URL = "https://pomueweeulenslxvsxar.supabase.co";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
 
 const EVENT_LABELS: Record<string, string> = {
   conversation_created: "Atendimento criado",

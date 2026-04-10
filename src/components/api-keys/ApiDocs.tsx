@@ -2,7 +2,7 @@ import { Copy, CheckCircle } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 
-const BASE_URL = "https://pomueweeulenslxvsxar.supabase.co/functions/v1/api-v1"
+const BASE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/api-v1`
 
 function CodeBlock({ code, language = "bash" }: { code: string; language?: string }) {
   const [copied, setCopied] = useState(false)
