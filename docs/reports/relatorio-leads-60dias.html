@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GMS — Relatório de Performance: Campanhas de Leads (60 dias)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL@20..48,300..700,0..1" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #F8FAFC; color: #333; line-height: 1.6; }
+
+    .icon { font-family: 'Material Symbols Rounded'; font-size: 20px; font-style: normal; line-height: 1; user-select: none; }
+    .icon-sm { font-size: 16px; }
+    .icon-lg { font-size: 24px; }
+    .icon-xl { font-size: 32px; }
+
+    /* Topbar */
+    .topbar {
+      height: 52px; background: #10293F; display: flex; align-items: center;
+      padding: 0 20px; gap: 16px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .tb-logo { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .tb-logo-mark {
+      background: #45E5E5; color: #10293F; font-family: 'Poppins', sans-serif;
+      font-weight: 700; font-size: 13px; padding: 3px 7px; border-radius: 4px; letter-spacing: 0.5px;
+    }
+    .tb-logo-text { color: #fff; font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 500; opacity: 0.9; }
+    .tb-breadcrumb { display: flex; align-items: center; gap: 4px; flex: 1; font-size: 13px; color: rgba(255,255,255,0.55); }
+    .tb-breadcrumb .icon { color: rgba(255,255,255,0.3); }
+    .tb-bc-active { color: #fff; font-weight: 500; }
+    .tb-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .tb-user { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.85); font-size: 13px; }
+    .tb-avatar {
+      width: 28px; height: 28px; border-radius: 50%; background: #45E5E5; color: #10293F;
+      font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Layout */
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px 20px 60px; }
+
+    /* Header do relatório */
+    .report-header {
+      background: #10293F; border-radius: 12px; padding: 32px; margin-bottom: 24px;
+      color: #fff; position: relative; overflow: hidden;
+    }
+    .report-header::after {
+      content: ''; position: absolute; right: -40px; top: -40px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: rgba(69,229,229,0.1);
+    }
+    .report-header h1 {
+      font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 4px;
+    }
+    .report-header .subtitle { color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 16px; }
+    .report-header .period {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(69,229,229,0.15); color: #45E5E5; padding: 6px 14px;
+      border-radius: 20px; font-size: 13px; font-weight: 600;
+    }
+
+    /* Metric Cards */
+    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .metric-card {
+      background: #fff; border: 1px solid #E5E5E5; border-radius: 8px;
+      padding: 20px; box-shadow: 0 1px 3px rgba(16,41,63,0.06);
+      transition: all 200ms;
+    }
+    .metric-card:hover { box-shadow: 0 4px 12px rgba(16,41,63,0.1); transform: translateY(-1px); }
+    .mc-label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .mc-number { font-size: 28px; font-weight: 700; color: #10293F; font-family: 'Poppins', sans-serif; }
+    .mc-number.highlight { color: #45E5E5; }
+    .mc-delta { font-size: 12px; font-weight: 600; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+    .mc-delta.up { color: #16A34A; }
+    .mc-delta.down { color: #DC2626; }
+    .mc-delta.warn { color: #FFB800; }
+    .mc-icon {
+      width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; margin-bottom: 10px;
+    }
+    .mc-icon.cyan { background: #E8F9F9; color: #10293F; }
+    .mc-icon.navy { background: #10293F; color: #45E5E5; }
+    .mc-icon.yellow { background: #FFFBEB; color: #92400E; }
+    .mc-icon.red { background: #FEF2F2; color: #DC2626; }
+    .mc-icon.green { background: #F0FDF4; color: #16A34A; }
+    .mc-icon.purple { background: #F3F0FF; color: #7C3AED; }
+
+    /* Sections */
+    .section { margin-bottom: 32px; }
+    .section-title {
+      font-family: 'Poppins', sans-serif; font-size: 18px; font-weight: 600;
+      color: #10293F; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+    }
+    .section-title .icon { color: #45E5E5; }
+
+    /* Alert Banners */
+    .alert {
+      padding: 14px 18px; border-radius: 8px; margin-bottom: 16px;
+      display: flex; align-items: flex-start; gap: 10px; font-size: 13px;
+    }
+    .alert-danger { background: #FEF2F2; border: 1px solid rgba(220,38,38,0.3); color: #991B1B; }
+    .alert-warning { background: #FFFBEB; border: 1px solid rgba(255,184,0,0.5); color: #92400E; }
+    .alert-success { background: #F0FDF4; border: 1px solid rgba(22,163,74,0.3); color: #166534; }
+    .alert-info { background: #E8F9F9; border: 1px solid rgba(69,229,229,0.4); color: #10293F; }
+    .alert .icon { flex-shrink: 0; margin-top: 1px; }
+    .alert strong { font-weight: 600; }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; border: 1px solid #E5E5E5; border-radius: 8px; margin-bottom: 16px; }
+    .table { width: 100%; border-collapse: collapse; background: #fff; }
+    .table thead { background: #10293F; }
+    .table th {
+      padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600;
+      color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;
+    }
+    .table th.right, .table td.right { text-align: right; }
+    .table tbody tr { border-bottom: 1px solid #F0F0F0; transition: background 100ms; }
+    .table tbody tr:hover { background: #F8FAFC; }
+    .table td { padding: 10px 14px; font-size: 13px; color: #333; }
+    .table td.mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+
+    /* Bar chart simple */
+    .bar-container { display: flex; align-items: center; gap: 8px; }
+    .bar { height: 8px; border-radius: 4px; background: #45E5E5; transition: width 500ms ease; }
+    .bar.warn { background: #FFB800; }
+    .bar.danger { background: #DC2626; }
+    .bar.success { background: #16A34A; }
+    .bar.navy { background: #10293F; }
+
+    /* Trend chart (CSS only) */
+    .trend-chart { display: flex; align-items: flex-end; gap: 3px; height: 120px; padding: 16px 0; }
+    .trend-bar {
+      flex: 1; border-radius: 4px 4px 0 0; transition: height 300ms ease;
+      position: relative; cursor: pointer; min-width: 40px;
+    }
+    .trend-bar:hover { opacity: 0.85; }
+    .trend-bar .tooltip {
+      display: none; position: absolute; bottom: calc(100% + 8px); left: 50%;
+      transform: translateX(-50%); background: #10293F; color: #fff;
+      padding: 6px 10px; border-radius: 6px; font-size: 11px; white-space: nowrap;
+      z-index: 10;
+    }
+    .trend-bar:hover .tooltip { display: block; }
+    .trend-labels { display: flex; gap: 3px; margin-top: 4px; }
+    .trend-labels span { flex: 1; text-align: center; font-size: 10px; color: #666; min-width: 40px; }
+
+    /* Badges */
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+      border-radius: 9999px; font-size: 11px; font-weight: 600; white-space: nowrap;
+    }
+    .badge-success { background: #F0FDF4; color: #16A34A; border: 1px solid rgba(22,163,74,0.3); }
+    .badge-warning { background: #FFFBEB; color: #92400E; border: 1px solid rgba(255,184,0,0.5); }
+    .badge-error { background: #FEF2F2; color: #DC2626; border: 1px solid rgba(220,38,38,0.3); }
+    .badge-info { background: #E8F9F9; color: #10293F; border: 1px solid rgba(69,229,229,0.4); }
+    .badge-navy { background: #10293F; color: #fff; }
+
+    /* Score */
+    .score-ring {
+      width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-family: 'Poppins', sans-serif; font-size: 28px;
+      font-weight: 700; margin: 0 auto 8px;
+    }
+    .score-ring.good { background: #F0FDF4; color: #16A34A; border: 4px solid #16A34A; }
+    .score-ring.warn { background: #FFFBEB; color: #92400E; border: 4px solid #FFB800; }
+    .score-ring.bad { background: #FEF2F2; color: #DC2626; border: 4px solid #DC2626; }
+
+    /* Recommendation cards */
+    .rec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+    .rec-card {
+      background: #fff; border: 1px solid #E5E5E5; border-radius: 8px; padding: 20px;
+      border-left: 4px solid transparent;
+    }
+    .rec-card.critical { border-left-color: #DC2626; }
+    .rec-card.high { border-left-color: #FFB800; }
+    .rec-card.medium { border-left-color: #2563EB; }
+    .rec-card.low { border-left-color: #16A34A; }
+    .rec-card h4 { font-size: 14px; font-weight: 600; color: #10293F; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .rec-card p { font-size: 13px; color: #444; margin-bottom: 8px; }
+    .rec-card .impact { font-size: 11px; font-weight: 600; color: #666; }
+
+    /* Comparison */
+    .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .comp-card {
+      background: #fff; border: 1px solid #E5E5E5; border-radius: 8px; padding: 20px;
+    }
+    .comp-card h4 { font-size: 13px; font-weight: 600; color: #10293F; margin-bottom: 12px; }
+    .comp-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #F0F0F0; font-size: 13px; }
+    .comp-row:last-child { border-bottom: none; }
+    .comp-row .label { color: #666; }
+    .comp-row .value { font-weight: 600; color: #10293F; }
+
+    /* Footer */
+    .report-footer {
+      text-align: center; padding: 24px; color: #666; font-size: 12px;
+      border-top: 1px solid #E5E5E5; margin-top: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .comparison-grid { grid-template-columns: 1fr; }
+      .rec-grid { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      .topbar { position: relative; }
+      body { background: #fff; }
+      .metric-card:hover, .rec-card:hover { transform: none; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-logo">
+    <span class="tb-logo-mark">GMS</span>
+    <span class="tb-logo-text">Gestao Mais Simples</span>
+  </div>
+  <nav class="tb-breadcrumb">
+    <span>Marketing</span>
+    <span class="icon icon-sm">chevron_right</span>
+    <span>Facebook Ads</span>
+    <span class="icon icon-sm">chevron_right</span>
+    <span class="tb-bc-active">Relatorio de Leads</span>
+  </nav>
+  <div class="tb-actions">
+    <div class="tb-user">
+      <span class="tb-avatar">MS</span>
+      <span>Marcio S.</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Report Header -->
+  <div class="report-header">
+    <h1>Relatorio de Performance: Campanhas de Leads</h1>
+    <div class="subtitle">Conta: Mais Simples ADS | Analise completa dos ultimos 60 dias</div>
+    <span class="period">
+      <span class="icon icon-sm">schedule</span>
+      24 Jan 2026 - 25 Mar 2026
+    </span>
+  </div>
+
+  <!-- ALERTA PRINCIPAL -->
+  <div class="alert alert-danger">
+    <span class="icon">warning</span>
+    <div>
+      <strong>ALERTA CRITICO: CPL subindo 397% em 9 semanas.</strong><br>
+      O custo por lead saiu de R$2,36 (semana 1) para R$11,73 (semana 9). A tendencia e de degradacao acelerada, indicando fadiga de audiencia, saturacao de criativos ou perda de relevancia. Acao imediata necessaria.
+    </div>
+  </div>
+
+  <!-- KPIs Principais -->
+  <section class="section">
+    <h2 class="section-title"><span class="icon">dashboard</span> KPIs Consolidados (60 dias)</h2>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="mc-icon cyan"><span class="icon">payments</span></div>
+        <div class="mc-label">Investimento Total</div>
+        <div class="mc-number">R$ 15.657</div>
+        <div class="mc-delta warn">~R$261/dia media</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-icon green"><span class="icon">group</span></div>
+        <div class="mc-label">Total de Leads</div>
+        <div class="mc-number highlight">3.435</div>
+        <div class="mc-delta up">~57 leads/dia</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-icon navy"><span class="icon">price_check</span></div>
+        <div class="mc-label">CPL Medio</div>
+        <div class="mc-number">R$ 4,56</div>
+        <div class="mc-delta down"><span class="icon icon-sm">trending_up</span> Subindo</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-icon purple"><span class="icon">ads_click</span></div>
+        <div class="mc-label">CTR Medio</div>
+        <div class="mc-number">2,67%</div>
+        <div class="mc-delta warn">Dentro da media</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-icon yellow"><span class="icon">visibility</span></div>
+        <div class="mc-label">Impressoes</div>
+        <div class="mc-number">1,64M</div>
+        <div class="mc-delta up">Alcance: 510K</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-icon red"><span class="icon">touch_app</span></div>
+        <div class="mc-label">Cliques Totais</div>
+        <div class="mc-number">43.813</div>
+        <div class="mc-delta">CPC medio: R$0,36</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TENDENCIA SEMANAL CPL -->
+  <section class="section">
+    <h2 class="section-title"><span class="icon">trending_up</span> Tendencia Semanal: CPL vs Leads</h2>
+
+    <div class="alert alert-warning">
+      <span class="icon">psychology</span>
+      <div>
+        <strong>Diagnostico:</strong> O volume de leads caiu 85% (707 → 103) enquanto o investimento se manteve estavel (~R$1.800/semana). Isso indica que o algoritmo do Meta esta tendo dificuldade em encontrar publicos novos ao custo desejado.
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Semana</th>
+            <th class="right">Investimento</th>
+            <th class="right">Leads</th>
+            <th class="right">CPL</th>
+            <th class="right">CTR</th>
+            <th>Tendencia</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>24-30 Jan</td>
+            <td class="right">R$ 1.666,59</td>
+            <td class="right"><strong>707</strong></td>
+            <td class="right"><span class="badge badge-success">R$ 2,36</span></td>
+            <td class="right">2,85%</td>
+            <td><div class="bar-container"><div class="bar success" style="width:100%"></div></div></td>
+          </tr>
+          <tr>
+            <td>31 Jan - 06 Fev</td>
+            <td class="right">R$ 1.746,58</td>
+            <td class="right"><strong>540</strong></td>
+            <td class="right"><span class="badge badge-success">R$ 3,23</span></td>
+            <td class="right">2,73%</td>
+            <td><div class="bar-container"><div class="bar success" style="width:76%"></div></div></td>
+          </tr>
+          <tr>
+            <td>07-13 Fev</td>
+            <td class="right">R$ 1.808,56</td>
+            <td class="right"><strong>540</strong></td>
+            <td class="right"><span class="badge badge-success">R$ 3,35</span></td>
+            <td class="right">2,59%</td>
+            <td><div class="bar-container"><div class="bar success" style="width:76%"></div></div></td>
+          </tr>
+          <tr>
+            <td>14-20 Fev</td>
+            <td class="right">R$ 1.811,75</td>
+            <td class="right"><strong>468</strong></td>
+            <td class="right"><span class="badge badge-warning">R$ 3,87</span></td>
+            <td class="right">3,04%</td>
+            <td><div class="bar-container"><div class="bar warn" style="width:66%"></div></div></td>
+          </tr>
+          <tr>
+            <td>21-27 Fev</td>
+            <td class="right">R$ 1.910,25</td>
+            <td class="right"><strong>267</strong></td>
+            <td class="right"><span class="badge badge-warning">R$ 7,15</span></td>
+            <td class="right">3,18%</td>
+            <td><div class="bar-container"><div class="bar warn" style="width:38%"></div></div></td>
+          </tr>
+          <tr>
+            <td>28 Fev - 06 Mar</td>
+            <td class="right">R$ 1.822,95</td>
+            <td class="right"><strong>270</strong></td>
+            <td class="right"><span class="badge badge-warning">R$ 6,75</span></td>
+            <td class="right">2,42%</td>
+            <td><div class="bar-container"><div class="bar warn" style="width:38%"></div></div></td>
+          </tr>
+          <tr>
+            <td>07-13 Mar</td>
+            <td class="right">R$ 1.872,32</td>
+            <td class="right"><strong>266</strong></td>
+            <td class="right"><span class="badge badge-error">R$ 7,04</span></td>
+            <td class="right">2,41%</td>
+            <td><div class="bar-container"><div class="bar danger" style="width:37%"></div></div></td>
+          </tr>
+          <tr>
+            <td>14-20 Mar</td>
+            <td class="right">R$ 1.810,09</td>
+            <td class="right"><strong>274</strong></td>
+            <td class="right"><span class="badge badge-error">R$ 6,61</span></td>
+            <td class="right">2,51%</td>
+            <td><div class="bar-container"><div class="bar danger" style="width:39%"></div></div></td>
+          </tr>
+          <tr style="background:#FEF2F2">
+            <td><strong>21-25 Mar</strong></td>
+            <td class="right"><strong>R$ 1.208,69</strong></td>
+            <td class="right"><strong>103</strong></td>
+            <td class="right"><span class="badge badge-error">R$ 11,73</span></td>
+            <td class="right">2,33%</td>
+            <td><div class="bar-container"><div class="bar danger" style="width:15%"></div></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PERFORMANCE POR CAMPANHA -->
+  <section class="section">
+    <h2 class="section-title"><span class="icon">campaign</span> Performance por Campanha</h2>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Campanha</th>
+            <th class="right">Invest.</th>
+            <th class="right">Leads</th>
+            <th class="right">CPL</th>
+            <th class="right">CTR</th>
+            <th class="right">CPC</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>[LEAD][FREE] 02/07/2025 LP</td>
+            <td class="right">R$ 4.233,82</td>
+            <td class="right"><strong>1.552</strong></td>
+            <td class="right"><span class="badge badge-success">R$ 2,73</span></td>
+            <td class="right">2,76%</td>
+            <td class="right">R$ 0,38</td>
+            <td><span class="badge badge-success">Melhor CPL</span></td>
+          </tr>
+          <tr>
+            <td>[LEAD][FREE] 05/11 LP - MQL</td>
+            <td class="right">R$ 3.624,20</td>
+            <td class="right"><strong>1.168</strong></td>
+            <td class="right"><span class="badge badge-success">R$ 3,10</span></td>
+            <td class="right">1,85%</td>
+            <td class="right">R$ 0,33</td>
+            <td><span class="badge badge-info">Volume alto</span></td>
+          </tr>
+          <tr>
+            <td>[LEADS] MATCOM - MQL</td>
+            <td class="right">R$ 1.809,81</td>
+            <td class="right"><strong>181</strong></td>
+            <td class="right"><span class="badge badge-warning">R$ 9,99</span></td>
+            <td class="right">3,49%</td>
+            <td class="right">R$ 0,34</td>
+            <td><span class="badge badge-warning">CPL alto</span></td>
+          </tr>
+          <tr>
+            <td>[LEADS] CBO MOTO PECAS</td>
+            <td class="right">R$ 2.954,15</td>
+            <td class="right"><strong>257</strong></td>
+            <td class="right"><span class="badge badge-error">R$ 11,49</span></td>
+            <td class="right">3,03%</td>
+            <td class="right">R$ 0,37</td>
+            <td><span class="badge badge-error">Revisar</span></td>
+          </tr>
+          <tr>
+            <td>[CADASTRO] MERCADO/SIMILARES 2</td>
+            <td class="right">R$ 2.717,82</td>
+            <td class="right"><strong>236</strong></td>
+            <td class="right"><span class="badge badge-error">R$ 11,52</span></td>
+            <td class="right">3,19%</td>
+            <td class="right">R$ 0,46</td>
+            <td><span class="badge badge-error">Revisar</span></td>
+          </tr>
+          <tr>
+            <td>PS Leads Teste Inicial</td>
+            <td class="right">R$ 127,07</td>
+            <td class="right"><strong>41</strong></td>
+            <td class="right"><span class="badge badge-success">R$ 3,10</span></td>
+            <td class="right">3,26%</td>
+            <td class="right">R$ 0,71</td>
+            <td><span class="badge badge-info">Escalar?</span></td>
+          </tr>
+          <tr style="background: #F5F5F5">
+            <td>Posts Instagram (Boost)</td>
+            <td class="right">R$ 190,91</td>
+            <td class="right">0</td>
+            <td class="right">—</td>
+            <td class="right">6,21%</td>
+            <td class="right">R$ 0,08</td>
+            <td><span class="badge badge-warning">Sem lead</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert alert-info">
+      <span class="icon">lightbulb</span>
+      <div>
+        <strong>Insight:</strong> As 2 melhores campanhas (LP 02/07 + MQL 05/11) geram <strong>79% dos leads</strong> com <strong>51% do investimento</strong>. As campanhas de Moto Pecas e Mercado/Similares tem CPL 4x maior — sao candidatas a pausa ou reestruturacao.
+      </div>
+    </div>
+  </section>
+
+  <!-- PERFORMANCE POR PLATAFORMA -->
+  <section class="section">
+    <h2 class="section-title"><span class="icon">devices</span> Performance por Plataforma</h2>
+    <div class="comparison-grid">
+      <div class="comp-card">
+        <h4><span class="icon icon-sm" style="color:#1877F2">public</span> Facebook</h4>
+        <div class="comp-row"><span class="label">Investimento</span><span class="value">R$ 11.342,22 (72%)</span></div>
+        <div class="comp-row"><span class="label">Leads</span><span class="value">2.355 (69%)</span></div>
+        <div class="comp-row"><span class="label">CPL</span><span class="value" style="color:#FFB800">R$ 4,82</span></div>
+        <div class="comp-row"><span class="label">CTR</span><span class="value">2,56%</span></div>
+        <div class="comp-row"><span class="label">Alcance</span><span class="value">413.368</span></div>
+        <div class="comp-row"><span class="label">Frequencia</span><span class="value">3,27</span></div>
+      </div>
+      <div class="comp-card" style="border: 2px solid #45E5E5">
+        <h4><span class="icon icon-sm" style="color:#E1306C">photo_camera</span> Instagram <span class="badge badge-success" style="margin-left:8px">Melhor CPL</span></h4>
+        <div class="comp-row"><span class="label">Investimento</span><span class="value">R$ 4.275,57 (27%)</span></div>
+        <div class="comp-row"><span class="label">Leads</span><span class="value">1.074 (31%)</span></div>
+        <div class="comp-row"><span class="label">CPL</span><span class="value" style="color:#16A34A"><strong>R$ 3,98</strong></span></div>
+        <div class="comp-row"><span class="label">CTR</span><span class="value">3,20%</span></div>
+        <div class="comp-row"><span class="label">Alcance</span><span class="value">95.688</span></div>
+        <div class="comp-row"><span class="label">Frequencia</span><span class="value">2,96</span></div>
+      </div>
+    </div>
+
+    <div style="margin-top:12px">
+      <div class="alert alert-success">
+        <span class="icon">auto_fix_high</span>
+        <div>
+          <strong>Oportunidade:</strong> Instagram tem CPL 17% menor que Facebook (R$3,98 vs R$4,82), CTR 25% maior e frequencia menor. <strong>Realocar 10-15% do budget de Facebook para Instagram</strong> pode reduzir CPL geral.
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px">
+      <p style="font-size:13px; color:#666; margin-bottom:8px"><strong>Outras plataformas:</strong></p>
+      <div style="display:flex; gap:12px; flex-wrap:wrap">
+        <span class="badge badge-error">Audience Network: R$28,52 | 2 leads | CPL R$14,26 — DESATIVAR</span>
+        <span class="badge badge-warning">Threads: R$11,45 | 0 leads — SEM RESULTADO</span>
+        <span class="badge" style="background:#F5F5F5; color:#666; border:1px solid #E5E5E5">Messenger: R$0 — inativo</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENCHMARKS DO SETOR -->
+  <section class="section">
+    <h2 class="section-title"><span class="icon">leaderboard</span> Benchmark: SaaS B2B Brasil vs Sismais</h2>
+
+    <div class="alert alert-info">
+      <span class="icon">info</span>
+      <div>Benchmarks baseados em medias do setor SaaS/Software B2B para PMEs no Brasil (fontes: Resultados Digitais, RD Station, WordStream 2025). Variacoes sao normais por nicho.</div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Metrica</th>
+            <th class="right">Sismais (60d)</th>
+            <th class="right">Benchmark SaaS BR</th>
+            <th class="right">Diferenca</th>
+            <th>Veredicto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CPL (Custo por Lead)</td>
+            <td class="right"><strong>R$ 4,56</strong></td>
+            <td class="right">R$ 15-40</td>
+            <td class="right" style="color:#16A34A"><strong>-70% a -89%</strong></td>
+            <td><span class="badge badge-success">Excelente</span></td>
+          </tr>
+          <tr>
+            <td>CTR (Click-Through Rate)</td>
+            <td class="right"><strong>2,67%</strong></td>
+            <td class="right">0,8-1,5%</td>
+            <td class="right" style="color:#16A34A"><strong>+78% a +234%</strong></td>
+            <td><span class="badge badge-success">Acima da media</span></td>
+          </tr>
+          <tr>
+            <td>CPC (Custo por Clique)</td>
+            <td class="right"><strong>R$ 0,36</strong></td>
+            <td class="right">R$ 1,50-4,00</td>
+            <td class="right" style="color:#16A34A"><strong>-76% a -91%</strong></td>
+            <td><span class="badge badge-success">Excelente</span></td>
+          </tr>
+          <tr>
+            <td>Frequencia</td>
+            <td class="right"><strong>3,2</strong></td>
+            <td class="right">1,5-2,5</td>
+            <td class="right" style="color:#DC2626"><strong>+28% a +113%</strong></td>
+            <td><span class="badge badge-error">ALTA - Fadiga</span></td>
+          </tr>
+          <tr>
+            <td>Taxa de Conversao (Clique → Lead)</td>
+            <td class="right"><strong>7,84%</strong></td>
+            <td class="right">2-5%</td>
+            <td class="right" style="color:#16A34A"><strong>+57% a +292%</strong></td>
+            <td><span class="badge badge-success">Excelente</span></td>
+          </tr>
+          <tr>
+            <td>CPL Tendencia</td>
+            <td class="right" style="color:#DC2626"><strong>+397% em 9 sem</strong></td>
+            <td class="right">Estavel (+-20%)</td>
+            <td class="right" style="color:#DC2626"><strong>Degradando</strong></td>
+            <td><span class="badge badge-error">CRITICO</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert alert-warning">
+      <span class="icon">balance</span>
+      <div>
+        <strong>Resumo:</strong> Seus custos absolutos sao excelentes comparados ao mercado SaaS B2B. O problema NAO e o custo em si, mas a <strong>tendencia de degradacao acelerada</strong>. Se nao corrigir, em 4 semanas o CPL pode chegar a R$15-20, entrando na faixa media do mercado.
+      </div>
+    </div>
+  </section>
+
+  <!-- DIAGNOSTICO DE PROBLEMAS -->
+  <section class="section">
+    <h2 class="section-title"><span class="icon">bug_report</span> Diagnostico de Problemas Identificados</h2>
+
+    <div class="rec-grid">
+      <div class="rec-card critical">
+        <h4><span class="badge badge-error">CRITICO</span> Fadiga de Audiencia / Frequencia Alta</h4>
+        <p>Frequencia media de <strong>3,2</strong> (ideal: 1,5-2,5). No Facebook chega a 3,27. O mesmo publico esta vendo seus anuncios repetidamente, o que aumenta custo e reduz conversao.</p>
+        <div class="impact"><span class="icon icon-sm">impact</span> Impacto estimado no CPL: +40-60%</div>
+      </div>
+
+      <div class="rec-card critical">
+        <h4><span class="badge badge-error">CRITICO</span> Criativos Saturados</h4>
+        <p>Campanhas ativas desde Jul/2025 e Nov/2025 sem rotacao de criativos. O algoritmo perdeu capacidade de otimizacao. Landing pages e anuncios provavelmente com fadiga visual.</p>
+        <div class="impact"><span class="icon icon-sm">impact</span> Impacto estimado no CPL: +30-50%</div>
+      </div>
+
+      <div class="rec-card high">
+        <h4><span class="badge badge-warning">ALTO</span> Campanhas Ineficientes Consumindo Budget</h4>
+        <p>Moto Pecas (CPL R$11,49) e Mercado/Similares (CPL R$11,52) consomem <strong>36% do budget</strong> mas geram apenas <strong>14% dos leads</strong>. Subsidio cruzado negativo.</p>
+        <div class="impact"><span class="icon icon-sm">impact</span> Economia potencial: R$100-150/dia</div>
+      </div>
+
+      <div class="rec-card high">
+        <h4><span class="badge badge-warning">ALTO</span> Estrategia de Lance Unica (Lowest Cost)</h4>
+        <p>Todas as campanhas usam <strong>LOWEST_COST_WITHOUT_CAP</strong>. Sem cap de lance, o Meta aumenta CPL livremente quando o publico satura. Falta controle de custo maximo.</p>
+        <div class="impact"><span class="icon icon-sm">impact</span> Risco de CPL descontrolado</div>
+      </div>
+
+      <div class="rec-card medium">
+        <h4><span class="badge badge-info">MEDIO</span> Alocacao Subotima entre Plataformas</h4>
+        <p>72% do budget vai para Facebook com CPL R$4,82, enquanto Instagram tem CPL R$3,98 (-17%) e recebe apenas 27%. Audience Network e Threads nao convertem.</p>
+        <div class="impact"><span class="icon icon-sm">impact</span> Economia potencial: R$30-50/dia</div>
+      </div>
+
+      <div class="rec-card medium">
+        <h4><span class="badge badge-info">MEDIO</span> Falta de Segmentacao por Nicho</h4>
+        <p>Campanhas agrupam publicos muito diferentes (mercado, moto pecas, matcom). Cada nicho tem dor e linguagem propria — criativos genericos perdem relevancia.</p>
+        <div class="impact"><span class="icon icon-sm">impact</span> Impacto no Quality Score e relevancia</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANO DE OTIMIZACAO -->
+  <section class="section">
+    <h2 class="section-title"><span class="icon">rocket_launch</span> Plano de Otimizacao — Acoes Recomendadas</h2>
+
+    <!-- Semana 1 -->
+    <h3 style="font-size:15px; font-weight:600; color:#10293F; margin: 20px 0 12px; display:flex; align-items:center; gap:8px">
+      <span class="badge badge-navy">Semana 1</span> Acoes Imediatas (Quick Wins)
+    </h3>
+    <div class="rec-grid">
+      <div class="rec-card critical">
+        <h4>1. Pausar Campanhas Ineficientes</h4>
+        <p><strong>Pausar:</strong> MOTO PECAS (CPL R$11,49) e MERCADO/SIMILARES (CPL R$11,52).<br>
+        <strong>Realocar:</strong> R$95/dia dessas campanhas para as campanhas com CPL < R$4.<br>
+        <strong>Resultado esperado:</strong> Economia de ~R$2.800/mes em budget desperdicado.</p>
+      </div>
+      <div class="rec-card critical">
+        <h4>2. Desativar Audience Network e Threads</h4>
+        <p>Remover Audience Network (CPL R$14,26) e Threads (0 leads) de todos os conjuntos de anuncios. Manter apenas Facebook e Instagram nos posicionamentos.</p>
+      </div>
+      <div class="rec-card high">
+        <h4>3. Adicionar Cost Cap nas Campanhas Ativas</h4>
+        <p>Trocar bid strategy de <strong>LOWEST_COST</strong> para <strong>COST_CAP</strong> com limite de R$5,00/lead. Isso impede que o Meta gaste acima do custo alvo, protegendo o ROI.</p>
+      </div>
+    </div>
+
+    <!-- Semana 2 -->
+    <h3 style="font-size:15px; font-weight:600; color:#10293F; margin: 20px 0 12px; display:flex; align-items:center; gap:8px">
+      <span class="badge badge-navy">Semana 2</span> Renovacao de Criativos
+    </h3>
+    <div class="rec-grid">
+      <div class="rec-card high">
+        <h4>4. Criar 3-5 Novos Criativos por Campanha</h4>
+        <p>
+          <strong>Formatos recomendados:</strong><br>
+          - Video curto (15-30s) mostrando o GMS em acao<br>
+          - Carrossel com depoimentos de clientes por nicho<br>
+          - Imagem estatica com dado impactante ("Reduza 80% do tempo de gestao")<br>
+          - UGC (User Generated Content) estilo depoimento<br>
+          <strong>Rotacao:</strong> Trocar criativos a cada 2-3 semanas.
+        </p>
+      </div>
+      <div class="rec-card high">
+        <h4>5. Landing Pages Segmentadas por Nicho</h4>
+        <p>
+          Criar LPs especificas para cada vertical:<br>
+          - <strong>/supermercado</strong> — dor: controle de estoque, perdas<br>
+          - <strong>/motopecas</strong> — dor: catalogo complexo, margem<br>
+          - <strong>/matcom</strong> — dor: orcamentos, obras<br>
+          Cada LP com headline, prova social e CTA especificos do nicho.
+        </p>
+      </div>
+    </div>
+
+    <!-- Semana 3 -->
+    <h3 style="font-size:15px; font-weight:600; color:#10293F; margin: 20px 0 12px; display:flex; align-items:center; gap:8px">
+      <span class="badge badge-navy">Semana 3</span> Reestruturacao de Audiencia
+    </h3>
+    <div class="rec-grid">
+      <div class="rec-card medium">
+        <h4>6. Expandir Lookalike Audiences</h4>
+        <p>
+          Criar novos Lookalikes baseados em:<br>
+          - Clientes ativos do GMS (melhor seed)<br>
+          - Leads que converteram em trial<br>
+          - Visitantes do site com tempo > 60s<br>
+          Testar LAL de 1%, 2% e 3-5% em campanhas separadas.
+        </p>
+      </div>
+      <div class="rec-card medium">
+        <h4>7. Exclusao de Publicos Saturados</h4>
+        <p>
+          Excluir de todas as campanhas:<br>
+          - Clientes atuais (lista de emails)<br>
+          - Leads dos ultimos 90 dias<br>
+          - Pessoas que ja preencheram formulario<br>
+          Isso forca o Meta a buscar publico novo, reduzindo frequencia.
+        </p>
+      </div>
+      <div class="rec-card medium">
+        <h4>8. Redistribuir Budget Instagram vs Facebook</h4>
+        <p>
+          Aumentar alocacao para Instagram de 27% para 40% do budget total.<br>
+          Instagram tem CPL 17% menor e frequencia mais saudavel (2,96 vs 3,27).<br>
+          Monitorar por 2 semanas e ajustar.
+        </p>
+      </div>
+    </div>
+
+    <!-- Semana 4+ -->
+    <h3 style="font-size:15px; font-weight:600; color:#10293F; margin: 20px 0 12px; display:flex; align-items:center; gap:8px">
+      <span class="badge badge-navy">Semana 4+</span> Otimizacao Continua
+    </h3>
+    <div class="rec-grid">
+      <div class="rec-card low">
+        <h4>9. Implementar Funil de Remarketing</h4>
+        <p>
+          Criar campanha de retargeting para visitantes que nao converteram:<br>
+          - Visitou LP mas nao preencheu form → mostrar depoimento/case<br>
+          - Iniciou form mas nao completou → mostrar oferta de trial<br>
+          Budget sugerido: 15-20% do total.
+        </p>
+      </div>
+      <div class="rec-card low">
+        <h4>10. A/B Test Sistematico</h4>
+        <p>
+          Testar semanalmente:<br>
+          - Headlines de anuncio (beneficio vs dor)<br>
+          - CTA (Teste Gratis vs Cadastre-se vs Veja Demo)<br>
+          - Formato (video vs imagem vs carrossel)<br>
+          - Horario de veiculacao<br>
+          Registrar resultados em planilha para acumular aprendizados.
+        </p>
+      </div>
+      <div class="rec-card low">
+        <h4>11. Escalar PS Leads Teste Inicial</h4>
+        <p>
+          A campanha "PS | Leads | Teste Inicial" tem CPL de R$3,10 com apenas R$127 investidos. Se o publico for diferente das campanhas principais, considere escalar gradualmente (+20% budget a cada 3 dias) para validar.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECAO DE RESULTADOS -->
+  <section class="section">
+    <h2 class="section-title"><span class="icon">query_stats</span> Projecao de Resultados com Otimizacao</h2>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Cenario</th>
+            <th class="right">CPL Estimado</th>
+            <th class="right">Leads/Mes</th>
+            <th class="right">Budget Mensal</th>
+            <th class="right">Economia</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#FEF2F2">
+            <td><strong>Atual (sem mudancas)</strong></td>
+            <td class="right"><span class="badge badge-error">R$ 10-15</span></td>
+            <td class="right">~500-700</td>
+            <td class="right">R$ 7.800</td>
+            <td class="right">—</td>
+          </tr>
+          <tr>
+            <td><strong>Semana 1 (Quick Wins)</strong></td>
+            <td class="right"><span class="badge badge-warning">R$ 5-7</span></td>
+            <td class="right">~1.100-1.500</td>
+            <td class="right">R$ 7.800</td>
+            <td class="right" style="color:#16A34A">+100% leads</td>
+          </tr>
+          <tr>
+            <td><strong>Semana 2-3 (Criativos + Audiencia)</strong></td>
+            <td class="right"><span class="badge badge-success">R$ 3-5</span></td>
+            <td class="right">~1.500-2.500</td>
+            <td class="right">R$ 7.800</td>
+            <td class="right" style="color:#16A34A">+200% leads</td>
+          </tr>
+          <tr style="background:#F0FDF4">
+            <td><strong>Mes 2+ (Otimizado)</strong></td>
+            <td class="right"><span class="badge badge-success">R$ 2,50-4</span></td>
+            <td class="right">~2.000-3.000</td>
+            <td class="right">R$ 7.800</td>
+            <td class="right" style="color:#16A34A"><strong>+300% leads</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- RESUMO EXECUTIVO -->
+  <section class="section">
+    <h2 class="section-title"><span class="icon">summarize</span> Resumo Executivo</h2>
+
+    <div style="background:#fff; border:1px solid #E5E5E5; border-radius:8px; padding:24px;">
+      <div style="display:grid; grid-template-columns: 80px 1fr; gap:20px; align-items:start;">
+        <div style="text-align:center">
+          <div class="score-ring warn">6.5</div>
+          <div style="font-size:11px; color:#666; font-weight:600">SCORE /10</div>
+        </div>
+        <div>
+          <h3 style="font-size:16px; font-weight:600; color:#10293F; margin-bottom:12px;">Campanhas funcionam, mas estao em declinio acelerado</h3>
+
+          <div style="margin-bottom:16px">
+            <h4 style="font-size:13px; font-weight:600; color:#16A34A; margin-bottom:6px;">O que esta funcionando:</h4>
+            <ul style="font-size:13px; color:#444; padding-left:20px;">
+              <li>CPL absoluto muito abaixo do mercado SaaS B2B (R$4,56 vs R$15-40)</li>
+              <li>CTR excelente (2,67% vs benchmark 0,8-1,5%)</li>
+              <li>Taxa de conversao LP forte (7,84%)</li>
+              <li>Volume relevante: 3.435 leads em 60 dias</li>
+              <li>Instagram performa melhor que Facebook em CPL</li>
+            </ul>
+          </div>
+
+          <div style="margin-bottom:16px">
+            <h4 style="font-size:13px; font-weight:600; color:#DC2626; margin-bottom:6px;">O que precisa de atencao urgente:</h4>
+            <ul style="font-size:13px; color:#444; padding-left:20px;">
+              <li><strong>CPL subiu 397% em 9 semanas</strong> — tendencia insustentavel</li>
+              <li>Frequencia alta (3,2) indica saturacao de publico</li>
+              <li>Criativos sem rotacao ha 5-10 meses</li>
+              <li>36% do budget em campanhas com CPL 4x maior que as melhores</li>
+              <li>Todas campanhas em Lowest Cost sem cap — custo descontrolado</li>
+              <li>Audience Network e Threads queimando budget sem retorno</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 style="font-size:13px; font-weight:600; color:#10293F; margin-bottom:6px;">Top 3 acoes prioritarias:</h4>
+            <ol style="font-size:13px; color:#444; padding-left:20px;">
+              <li><strong>HOJE:</strong> Pausar campanhas com CPL > R$10 e realocar budget</li>
+              <li><strong>ESTA SEMANA:</strong> Trocar para Cost Cap R$5 e desativar Audience Network/Threads</li>
+              <li><strong>PROXIMA SEMANA:</strong> Novos criativos + exclusao de publicos ja convertidos</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="report-footer">
+    <p>Relatorio gerado automaticamente em 25 de Marco de 2026 | Sismais Tecnologia — GMS</p>
+    <p>Dados extraidos via Facebook Ads API | Conta: Mais Simples ADS (act_486452446836316)</p>
+  </footer>
+
+</div>
+
+</body>
+</html>

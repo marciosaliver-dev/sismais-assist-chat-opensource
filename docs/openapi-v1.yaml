@@ -1,0 +1,512 @@
+openapi: 3.1.0
+info:
+  title: Sismais Helpdesk IA — Public API
+  version: 1.0.0
+  description: |
+    API REST publica para integradores terceiros do Sismais Helpdesk IA.
+
+    ## Autenticacao
+    Todas as requisicoes (exceto /health) devem incluir o header `X-API-Key`.
+
+    ## Rate Limiting
+    Respostas incluem headers `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`.
+    Limites variam por plano (free: 60 rpm / 10k rpd, pro: 300 rpm / 100k rpd).
+
+    ## Webhooks
+    Registre webhooks para receber notificacoes de eventos em tempo real.
+    Payloads sao assinados com HMAC-SHA256 no header `X-Sismais-Signature`.
+  contact:
+    name: Sismais Tecnologia
+    email: suporte@sismais.com.br
+
+servers:
+  - url: https://pomueweeulenslxvsxar.supabase.co/functions/v1/api-v1
+    description: Production
+
+security:
+  - ApiKeyAuth: []
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: "API key no formato sk_live_XXXXXXXX ou sk_test_XXXXXXXX"
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            code:
+              type: string
+            status:
+              type: integer
+
+    Pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total_pages:
+          type: integer
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        conversation_id:
+          type: string
+          format: uuid
+        role:
+          type: string
+          enum: [user, assistant]
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    Conversation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        customer_phone:
+          type: string
+        status:
+          type: string
+          enum: [open, active, waiting, resolved, closed]
+        handler_type:
+          type: string
+          enum: [ai, human]
+        agent_id:
+          type: string
+          format: uuid
+          nullable: true
+        priority:
+          type: string
+          enum: [low, medium, high, critical]
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    ConversationDetail:
+      allOf:
+        - $ref: '#/components/schemas/Conversation'
+        - type: object
+          properties:
+            summary:
+              type: string
+              nullable: true
+            messages:
+              type: array
+              items:
+                $ref: '#/components/schemas/Message'
+
+    Ticket:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+        priority:
+          type: string
+        summary:
+          type: string
+        handler_type:
+          type: string
+        kanban_board_id:
+          type: string
+          format: uuid
+        kanban_stage_id:
+          type: string
+          format: uuid
+        helpdesk_client_id:
+          type: string
+          format: uuid
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+
+    Client:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        documento:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        health_score:
+          type: number
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+
+    Webhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        url:
+          type: string
+          format: uri
+        events:
+          type: array
+          items:
+            type: string
+            enum:
+              - ticket.created
+              - ticket.updated
+              - message.received
+              - message.sent
+              - conversation.escalated
+              - conversation.closed
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: 1
+        minimum: 1
+    PerPageParam:
+      name: per_page
+      in: query
+      schema:
+        type: integer
+        default: 20
+        minimum: 1
+        maximum: 100
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      description: Retorna status da API. Nao requer autenticacao.
+      security: []
+      responses:
+        '200':
+          description: API operacional
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        example: ok
+                      version:
+                        type: string
+                        example: v1
+                      timestamp:
+                        type: string
+                        format: date-time
+
+  /messages:
+    post:
+      summary: Enviar mensagem
+      description: Envia uma mensagem em uma conversa existente.
+      tags: [Messages]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [conversation_id, content]
+              properties:
+                conversation_id:
+                  type: string
+                  format: uuid
+                content:
+                  type: string
+                  maxLength: 4096
+                sender_type:
+                  type: string
+                  enum: [user, agent]
+                  default: user
+      responses:
+        '201':
+          description: Mensagem enviada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Message'
+        '400':
+          description: Parametros invalidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Conversa nao encontrada
+
+  /conversations:
+    get:
+      summary: Listar conversas
+      tags: [Conversations]
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PerPageParam'
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [open, active, waiting, resolved, closed]
+      responses:
+        '200':
+          description: Lista paginada de conversas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Conversation'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+
+  /conversations/{id}:
+    get:
+      summary: Detalhe da conversa
+      tags: [Conversations]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Conversa com mensagens
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ConversationDetail'
+        '404':
+          description: Conversa nao encontrada
+
+  /tickets:
+    post:
+      summary: Criar ticket
+      tags: [Tickets]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title]
+              properties:
+                title:
+                  type: string
+                  maxLength: 255
+                description:
+                  type: string
+                  maxLength: 4096
+                priority:
+                  type: string
+                  enum: [low, medium, high, critical]
+                  default: medium
+                client_id:
+                  type: string
+                  format: uuid
+                board_slug:
+                  type: string
+                  default: suporte
+      responses:
+        '201':
+          description: Ticket criado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Ticket'
+    get:
+      summary: Listar tickets
+      tags: [Tickets]
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PerPageParam'
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: priority
+          in: query
+          schema:
+            type: string
+            enum: [low, medium, high, critical]
+      responses:
+        '200':
+          description: Lista paginada de tickets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Ticket'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+
+  /clients:
+    get:
+      summary: Listar clientes
+      tags: [Clients]
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PerPageParam'
+        - name: search
+          in: query
+          description: Busca por nome
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista paginada de clientes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Client'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+
+  /webhooks:
+    post:
+      summary: Registrar webhook
+      description: |
+        Registra um webhook para receber notificacoes de eventos.
+        O `secret` retornado na criacao e usado para verificar assinatura HMAC-SHA256
+        no header `X-Sismais-Signature` das entregas.
+      tags: [Webhooks]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url, events]
+              properties:
+                url:
+                  type: string
+                  format: uri
+                events:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - ticket.created
+                      - ticket.updated
+                      - message.received
+                      - message.sent
+                      - conversation.escalated
+                      - conversation.closed
+      responses:
+        '201':
+          description: Webhook registrado (secret visivel apenas nesta resposta)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    allOf:
+                      - $ref: '#/components/schemas/Webhook'
+                      - type: object
+                        properties:
+                          secret:
+                            type: string
+                            description: Secret HMAC (mostrado apenas na criacao)
+    get:
+      summary: Listar webhooks
+      tags: [Webhooks]
+      responses:
+        '200':
+          description: Lista de webhooks do integrador
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Webhook'
+
+  /webhooks/{id}:
+    delete:
+      summary: Remover webhook
+      tags: [Webhooks]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Webhook removido
+        '404':
+          description: Webhook nao encontrado

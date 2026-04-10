@@ -1,0 +1,1 @@
+ALTER TABLE ai_agents ADD COLUMN IF NOT EXISTS whatsapp_instances uuid[] DEFAULT ARRAY[]::uuid[];

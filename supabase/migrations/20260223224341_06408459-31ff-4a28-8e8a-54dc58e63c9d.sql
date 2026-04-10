@@ -1,0 +1,1 @@
+ALTER TABLE public.uazapi_chats ADD COLUMN is_ignored boolean DEFAULT false;

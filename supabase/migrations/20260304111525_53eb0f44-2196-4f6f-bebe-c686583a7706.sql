@@ -1,0 +1,1 @@
+UPDATE platform_ai_config SET model = 'text-embedding-3-small' WHERE feature = 'embedding';

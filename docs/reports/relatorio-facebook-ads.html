@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GMS — Relatorio Completo Facebook Ads | Mais Simples ADS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL@20..48,300..700,0..1" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #F8FAFC; color: #333; }
+    .icon { font-family: 'Material Symbols Rounded'; font-size: 20px; font-style: normal; line-height: 1; user-select: none; }
+    .icon-sm { font-size: 16px; }
+    .icon-lg { font-size: 24px; }
+    .icon-xl { font-size: 32px; }
+
+    /* Topbar */
+    .topbar { height: 52px; background: #10293F; display: flex; align-items: center; padding: 0 20px; gap: 16px; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 0 rgba(255,255,255,0.08); }
+    .tb-logo { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .tb-logo-mark { background: #45E5E5; color: #10293F; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 13px; padding: 3px 7px; border-radius: 4px; letter-spacing: 0.5px; }
+    .tb-logo-text { color: #fff; font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 500; opacity: 0.9; }
+    .tb-breadcrumb { display: flex; align-items: center; gap: 4px; flex: 1; font-size: 13px; color: rgba(255,255,255,0.55); }
+    .tb-breadcrumb .icon { color: rgba(255,255,255,0.3); }
+    .tb-bc-active { color: #fff; font-weight: 500; }
+    .tb-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .tb-user { display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 8px; color: rgba(255,255,255,0.85); font-size: 13px; }
+    .tb-avatar { width: 28px; height: 28px; border-radius: 50%; background: #45E5E5; color: #10293F; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+
+    /* Tabs Navigation */
+    .tabs-nav { background: #fff; border-bottom: 1px solid #E5E5E5; padding: 0 20px; display: flex; gap: 4px; position: sticky; top: 52px; z-index: 99; }
+    .tab-btn { padding: 12px 16px; font-size: 13px; font-weight: 500; color: #666; border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; transition: all 150ms; font-family: inherit; display: flex; align-items: center; gap: 6px; }
+    .tab-btn:hover { color: #10293F; background: #F8FAFC; }
+    .tab-btn.active { color: #10293F; font-weight: 600; border-bottom-color: #45E5E5; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Layout */
+    .page { max-width: 1440px; margin: 0 auto; padding: 24px 20px 60px; }
+
+    /* Report Header */
+    .report-header { background: linear-gradient(135deg, #10293F 0%, #1a3d5c 100%); border-radius: 12px; padding: 32px; margin-bottom: 24px; color: #fff; position: relative; overflow: hidden; }
+    .report-header::after { content: ''; position: absolute; top: -30px; right: -30px; width: 200px; height: 200px; border-radius: 50%; background: rgba(69,229,229,0.08); }
+    .report-header h1 { font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .report-header p { font-size: 14px; opacity: 0.7; }
+    .report-meta { display: flex; gap: 24px; margin-top: 16px; flex-wrap: wrap; }
+    .report-meta-item { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+    .report-meta-item .icon { color: #45E5E5; font-size: 18px; }
+
+    /* KPI Cards */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(195px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .kpi-card { background: #fff; border: 1px solid #E5E5E5; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(16,41,63,0.06); transition: all 200ms; }
+    .kpi-card:hover { box-shadow: 0 4px 12px rgba(16,41,63,0.1); transform: translateY(-1px); }
+    .kpi-label { font-size: 11px; color: #666; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .kpi-value { font-size: 26px; font-weight: 700; color: #10293F; font-family: 'Poppins', sans-serif; }
+    .kpi-value.cyan { color: #45E5E5; }
+    .kpi-sub { font-size: 12px; color: #666; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+    .kpi-sub .up { color: #16A34A; font-weight: 600; }
+    .kpi-sub .down { color: #DC2626; font-weight: 600; }
+    .kpi-sub .warn { color: #FFB800; font-weight: 600; }
+    .kpi-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+    .kpi-icon.c1 { background: #E8F9F9; color: #10293F; }
+    .kpi-icon.c2 { background: #10293F; color: #45E5E5; }
+    .kpi-icon.c3 { background: #FFFBEB; color: #92400E; }
+    .kpi-icon.c4 { background: #F0FDF4; color: #16A34A; }
+    .kpi-icon.c5 { background: #FEF2F2; color: #DC2626; }
+    .kpi-icon.c6 { background: #F3E8FF; color: #7C3AED; }
+
+    /* Section */
+    .section { margin-bottom: 32px; }
+    .section-title { font-family: 'Poppins', sans-serif; font-size: 17px; font-weight: 600; color: #10293F; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .section-title .icon { color: #45E5E5; }
+    .section-desc { font-size: 13px; color: #666; margin-bottom: 16px; margin-top: -8px; }
+
+    /* Charts */
+    .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+    .chart-card { background: #fff; border: 1px solid #E5E5E5; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(16,41,63,0.06); }
+    .chart-card h3 { font-size: 14px; font-weight: 600; color: #10293F; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
+    .chart-card h3 .icon { font-size: 18px; color: #45E5E5; }
+    .chart-wrap { position: relative; height: 280px; }
+    .chart-card.full { grid-column: 1 / -1; }
+    .chart-card.full .chart-wrap { height: 320px; }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; border: 1px solid #E5E5E5; border-radius: 12px; background: #fff; box-shadow: 0 1px 3px rgba(16,41,63,0.06); }
+    .table { width: 100%; border-collapse: collapse; }
+    .table thead { background: #10293F; }
+    .table th { padding: 12px 14px; text-align: left; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.85); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+    .table tbody tr { border-bottom: 1px solid #F0F0F0; transition: background 100ms; }
+    .table tbody tr:hover { background: #F8FAFC; }
+    .table td { padding: 11px 14px; font-size: 13px; color: #333; }
+    .table td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
+    .table td.name { max-width: 260px; font-weight: 500; color: #10293F; }
+    .table tfoot { background: #F8FAFC; border-top: 2px solid #E5E5E5; }
+    .table tfoot td { font-weight: 700; color: #10293F; }
+    .table th.r { text-align: right; }
+
+    /* Badges */
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .badge-success { background: #F0FDF4; color: #16A34A; border: 1px solid rgba(22,163,74,0.3); }
+    .badge-warning { background: #FFFBEB; color: #92400E; border: 1px solid rgba(255,184,0,0.5); }
+    .badge-error { background: #FEF2F2; color: #DC2626; border: 1px solid rgba(220,38,38,0.3); }
+    .badge-info { background: #E8F9F9; color: #10293F; border: 1px solid rgba(69,229,229,0.4); }
+    .badge-navy { background: #10293F; color: #fff; }
+    .badge-purple { background: #F3E8FF; color: #7C3AED; border: 1px solid rgba(124,58,237,0.3); }
+
+    /* Score bar */
+    .score-wrap { display: flex; align-items: center; gap: 8px; }
+    .score-bar { flex: 1; height: 8px; background: #E5E5E5; border-radius: 9999px; overflow: hidden; min-width: 60px; }
+    .score-fill { height: 100%; border-radius: 9999px; }
+    .score-fill.good { background: #16A34A; }
+    .score-fill.ok { background: #FFB800; }
+    .score-fill.bad { background: #DC2626; }
+    .score-label { font-size: 12px; font-weight: 600; min-width: 30px; }
+
+    /* Recommendation Cards */
+    .reco-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+    .reco-card { background: #fff; border: 1px solid #E5E5E5; border-radius: 12px; padding: 20px; border-left: 4px solid transparent; box-shadow: 0 1px 3px rgba(16,41,63,0.06); transition: all 200ms; }
+    .reco-card:hover { box-shadow: 0 4px 12px rgba(16,41,63,0.1); transform: translateY(-1px); }
+    .reco-card.critical { border-left-color: #DC2626; }
+    .reco-card.important { border-left-color: #FFB800; }
+    .reco-card.optimize { border-left-color: #45E5E5; }
+    .reco-card.growth { border-left-color: #16A34A; }
+    .reco-card h4 { font-size: 14px; font-weight: 600; color: #10293F; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .reco-card p { font-size: 13px; color: #666; line-height: 1.6; }
+    .reco-impact { margin-top: 10px; font-size: 12px; font-weight: 600; }
+
+    /* Creative Cards */
+    .creative-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+    .creative-card { background: #fff; border: 1px solid #E5E5E5; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(16,41,63,0.06); transition: all 200ms; }
+    .creative-card:hover { box-shadow: 0 4px 12px rgba(16,41,63,0.1); }
+    .cc-header { padding: 14px 16px; border-bottom: 1px solid #F0F0F0; display: flex; justify-content: space-between; align-items: center; }
+    .cc-header h4 { font-size: 13px; font-weight: 600; color: #10293F; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cc-body { padding: 14px 16px; font-size: 13px; color: #444; line-height: 1.5; max-height: 120px; overflow: hidden; position: relative; }
+    .cc-body::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40px; background: linear-gradient(transparent, #fff); }
+    .cc-meta { padding: 12px 16px; border-top: 1px solid #F0F0F0; display: flex; flex-wrap: wrap; gap: 6px; }
+    .cc-tag { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 9999px; background: #F5F5F5; color: #444; border: 1px solid #E5E5E5; }
+    .cc-stats { padding: 12px 16px; border-top: 1px solid #F0F0F0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .cc-stat-label { font-size: 10px; color: #999; text-transform: uppercase; }
+    .cc-stat-value { font-size: 14px; font-weight: 700; color: #10293F; }
+
+    /* ICP Box */
+    .icp-box { background: linear-gradient(135deg, #10293F 0%, #1a3d5c 100%); border-radius: 12px; padding: 28px 32px; color: #fff; margin-bottom: 24px; }
+    .icp-box h3 { font-family: 'Poppins', sans-serif; font-size: 17px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .icp-box h3 .icon { color: #45E5E5; }
+    .icp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .icp-item { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 14px 16px; }
+    .icp-item-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #45E5E5; margin-bottom: 6px; font-weight: 600; }
+    .icp-item-value { font-size: 14px; color: #fff; line-height: 1.5; }
+
+    /* Link Check */
+    .link-card { background: #fff; border: 1px solid #E5E5E5; border-radius: 12px; padding: 16px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 16px; }
+    .link-status { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .link-status.ok { background: #F0FDF4; color: #16A34A; }
+    .link-status.warn { background: #FFFBEB; color: #FFB800; }
+    .link-status.err { background: #FEF2F2; color: #DC2626; }
+    .link-info { flex: 1; }
+    .link-url { font-size: 13px; font-weight: 600; color: #10293F; word-break: break-all; }
+    .link-detail { font-size: 12px; color: #666; margin-top: 2px; }
+    .link-used { font-size: 11px; color: #999; margin-top: 2px; }
+
+    /* Priority banner */
+    .banner { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; }
+    .banner.warn { background: #FFFBEB; border: 1px solid rgba(255,184,0,0.3); color: #92400E; }
+    .banner.info { background: #E8F9F9; border: 1px solid rgba(69,229,229,0.3); color: #10293F; }
+    .banner .icon { flex-shrink: 0; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .charts-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .reco-grid, .creative-grid { grid-template-columns: 1fr; }
+      .tabs-nav { overflow-x: auto; }
+      .cc-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media print { .topbar, .tabs-nav { position: relative; } .tab-content { display: block !important; } }
+  </style>
+</head>
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="tb-logo"><span class="tb-logo-mark">GMS</span><span class="tb-logo-text">Gestao Mais Simples</span></div>
+    <nav class="tb-breadcrumb">
+      <span>Marketing</span><span class="icon icon-sm">chevron_right</span>
+      <span>Facebook Ads</span><span class="icon icon-sm">chevron_right</span>
+      <span class="tb-bc-active">Relatorio Completo</span>
+    </nav>
+    <div class="tb-actions"><div class="tb-user"><span class="tb-avatar">MS</span><span>Marcio S.</span></div></div>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab('overview')"><span class="icon icon-sm">monitoring</span> Visao Geral</button>
+    <button class="tab-btn" onclick="switchTab('history')"><span class="icon icon-sm">history</span> Historico Completo</button>
+    <button class="tab-btn" onclick="switchTab('creatives')"><span class="icon icon-sm">palette</span> Criativos</button>
+    <button class="tab-btn" onclick="switchTab('ads')"><span class="icon icon-sm">ads_click</span> Anuncios Ativos</button>
+    <button class="tab-btn" onclick="switchTab('links')"><span class="icon icon-sm">link</span> Links & LPs</button>
+    <button class="tab-btn" onclick="switchTab('reco')"><span class="icon icon-sm">auto_fix_high</span> Recomendacoes</button>
+  </nav>
+
+  <div class="page">
+    <!-- Report Header -->
+    <div class="report-header">
+      <h1>Relatorio Completo — Mais Simples ADS</h1>
+      <p>Analise de campanhas ativas + historico + criativos + links + recomendacoes</p>
+      <div class="report-meta">
+        <div class="report-meta-item"><span class="icon">calendar_today</span> 19 Fev — 20 Mar 2026 (30d) + Historico Total</div>
+        <div class="report-meta-item"><span class="icon">campaign</span> 50 campanhas (6 ativas + 44 pausadas)</div>
+        <div class="report-meta-item"><span class="icon">ads_click</span> 27 anuncios ativos analisados</div>
+        <div class="report-meta-item"><span class="icon">auto_fix_high</span> Gerado por IA — 21/03/2026</div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 1: OVERVIEW ==================== -->
+    <div id="tab-overview" class="tab-content active">
+      <section class="section">
+        <h2 class="section-title"><span class="icon">monitoring</span> KPIs — Ultimos 30 Dias</h2>
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="kpi-icon c1"><span class="icon icon-lg">payments</span></div><div class="kpi-label">Investimento</div><div class="kpi-value">R$ 7.956</div><div class="kpi-sub">~R$265/dia</div></div>
+          <div class="kpi-card"><div class="kpi-icon c4"><span class="icon icon-lg">person_add</span></div><div class="kpi-label">Leads (30d)</div><div class="kpi-value cyan">1.134</div><div class="kpi-sub"><span class="up">~37,8/dia</span></div></div>
+          <div class="kpi-card"><div class="kpi-icon c3"><span class="icon icon-lg">price_change</span></div><div class="kpi-label">CPL Medio</div><div class="kpi-value">R$ 7,01</div><div class="kpi-sub"><span class="warn">R$3 a R$13</span></div></div>
+          <div class="kpi-card"><div class="kpi-icon c2"><span class="icon icon-lg">visibility</span></div><div class="kpi-label">Impressoes</div><div class="kpi-value">882K</div><div class="kpi-sub">Alcance: 452K</div></div>
+          <div class="kpi-card"><div class="kpi-icon c6"><span class="icon icon-lg">touch_app</span></div><div class="kpi-label">Cliques Link</div><div class="kpi-value">13.334</div><div class="kpi-sub">CTR: 2,65%</div></div>
+          <div class="kpi-card"><div class="kpi-icon c5"><span class="icon icon-lg">all_inclusive</span></div><div class="kpi-label">Total Historico</div><div class="kpi-value">21.833</div><div class="kpi-sub">R$77.955 investidos (CPL R$3,57)</div></div>
+        </div>
+      </section>
+
+      <!-- Campaign Table 30d -->
+      <section class="section">
+        <h2 class="section-title"><span class="icon">campaign</span> Performance por Campanha (30 dias)</h2>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Campanha</th><th>Objetivo</th><th class="r">Invest.</th><th class="r">Imp.</th><th class="r">Cliques</th><th class="r">CTR</th><th class="r">Leads</th><th class="r">CPL</th><th>Score</th></tr></thead>
+            <tbody>
+              <tr><td class="name">MOTO PECAS [TESTE]</td><td><span class="badge badge-info">Leads</span></td><td class="num">R$1.792</td><td class="num">268K</td><td class="num">4.988</td><td class="num">1,85%</td><td class="num" style="color:#16A34A;font-weight:700">585</td><td class="num" style="color:#16A34A;font-weight:700">R$3,06</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill good" style="width:95%"></div></div><span class="score-label" style="color:#16A34A">95</span></div></td></tr>
+              <tr><td class="name">FREE 02/07 [LP]</td><td><span class="badge badge-info">Leads</span></td><td class="num">R$2.130</td><td class="num">251K</td><td class="num">6.522</td><td class="num">2,60%</td><td class="num" style="font-weight:700">227</td><td class="num" style="color:#FFB800;font-weight:600">R$9,38</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill good" style="width:72%"></div></div><span class="score-label" style="color:#16A34A">72</span></div></td></tr>
+              <tr><td class="name">MATCOM MQL</td><td><span class="badge badge-info">Leads</span></td><td class="num">R$1.494</td><td class="num">99K</td><td class="num">3.147</td><td class="num">3,17%</td><td class="num" style="font-weight:700">134</td><td class="num" style="color:#FFB800;font-weight:600">R$11,15</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill ok" style="width:60%"></div></div><span class="score-label" style="color:#FFB800">60</span></div></td></tr>
+              <tr><td class="name">FREE 05/11 [LP] MQL</td><td><span class="badge badge-info">Leads</span></td><td class="num">R$1.489</td><td class="num">146K</td><td class="num">4.087</td><td class="num">2,80%</td><td class="num" style="font-weight:700">113</td><td class="num" style="color:#DC2626;font-weight:600">R$13,17</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill ok" style="width:50%"></div></div><span class="score-label" style="color:#FFB800">50</span></div></td></tr>
+              <tr><td class="name">MERCADO SIMILARES 2</td><td><span class="badge badge-info">Leads</span></td><td class="num">R$896</td><td class="num">81K</td><td class="num">2.665</td><td class="num">3,30%</td><td class="num" style="font-weight:700">75</td><td class="num" style="color:#DC2626;font-weight:600">R$11,94</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill ok" style="width:48%"></div></div><span class="score-label" style="color:#FFB800">48</span></div></td></tr>
+              <tr><td class="name">Post Instagram (5 min)</td><td><span class="badge badge-navy">Cliques</span></td><td class="num">R$156</td><td class="num">36K</td><td class="num">2.062</td><td class="num" style="color:#16A34A">5,68%</td><td class="num" style="color:#999">0</td><td class="num" style="color:#999">N/A</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill bad" style="width:15%"></div></div><span class="score-label" style="color:#DC2626">15</span></div></td></tr>
+            </tbody>
+            <tfoot><tr><td>TOTAL</td><td></td><td class="num">R$7.957</td><td class="num">882K</td><td class="num">23.471</td><td class="num">2,65%</td><td class="num">1.134</td><td class="num">R$7,01</td><td></td></tr></tfoot>
+          </table>
+        </div>
+      </section>
+
+      <!-- Charts -->
+      <section class="section">
+        <h2 class="section-title"><span class="icon">bar_chart</span> Graficos</h2>
+        <div class="charts-grid">
+          <div class="chart-card full"><h3><span class="icon">timeline</span> Leads vs Investimento Diario</h3><div class="chart-wrap"><canvas id="chartDaily"></canvas></div></div>
+          <div class="chart-card"><h3><span class="icon">pie_chart</span> Leads por Campanha</h3><div class="chart-wrap"><canvas id="chartPie"></canvas></div></div>
+          <div class="chart-card"><h3><span class="icon">price_change</span> CPL por Campanha</h3><div class="chart-wrap"><canvas id="chartCPL"></canvas></div></div>
+          <div class="chart-card"><h3><span class="icon">group</span> Leads por Idade</h3><div class="chart-wrap"><canvas id="chartAge"></canvas></div></div>
+          <div class="chart-card"><h3><span class="icon">wc</span> Leads por Genero</h3><div class="chart-wrap"><canvas id="chartGender"></canvas></div></div>
+        </div>
+      </section>
+
+      <!-- ICP -->
+      <section class="section">
+        <div class="icp-box">
+          <h3><span class="icon">target</span> Perfil Ideal de Cliente (ICP) — Mais Simples</h3>
+          <div class="icp-grid">
+            <div class="icp-item"><div class="icp-item-label">Cargo</div><div class="icp-item-value">Dono, proprietario, socio ou gerente de pequeno negocio</div></div>
+            <div class="icp-item"><div class="icp-item-label">Segmento</div><div class="icp-item-value">Comercio varejista: mercados, auto pecas, lojas, roupas</div></div>
+            <div class="icp-item"><div class="icp-item-label">Idade Ideal</div><div class="icp-item-value">25-54 anos (85% dos leads, melhor CPL R$6,43)</div></div>
+            <div class="icp-item"><div class="icp-item-label">Genero</div><div class="icp-item-value">Masculino (85% leads, CPL 18% menor)</div></div>
+            <div class="icp-item"><div class="icp-item-label">Dor Principal</div><div class="icp-item-value">Precisa de controle simples: NF, estoque, financeiro. Sem ERP complexo.</div></div>
+            <div class="icp-item"><div class="icp-item-label">Gatilho</div><div class="icp-item-value">"Gratuito" + "5 minutos" — facilidade e custo zero decidem</div></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== TAB 2: HISTORY ==================== -->
+    <div id="tab-history" class="tab-content">
+      <section class="section">
+        <h2 class="section-title"><span class="icon">history</span> Historico Completo — Todas as Campanhas (All-Time)</h2>
+        <p class="section-desc">50 campanhas criadas desde Nov 2022. 25 com dados de performance. Ordenadas por volume de leads.</p>
+
+        <div class="banner info"><span class="icon">emoji_objects</span><strong>Insight:</strong>&nbsp;A campanha original "Captacao e Download" (2022) gerou 7.181 leads com CPL R$2,49 — a melhor de toda a historia da conta.</div>
+
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Campanha</th><th>Status</th><th>Objetivo</th><th class="r">Invest. Total</th><th class="r">Impressoes</th><th class="r">Cliques</th><th class="r">CTR</th><th class="r">Leads</th><th class="r">CPL</th><th>Score</th></tr></thead>
+            <tbody>
+              <tr style="background:#F0FDF4"><td class="name">[Leads] [Free] Captacao e Download</td><td><span class="badge badge-warning">Pausada</span></td><td>Leads</td><td class="num">R$17.849</td><td class="num">1.457K</td><td class="num">50.475</td><td class="num">3,46%</td><td class="num" style="color:#16A34A;font-weight:700">7.181</td><td class="num" style="color:#16A34A;font-weight:700">R$2,49</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill good" style="width:98%"></div></div><span class="score-label" style="color:#16A34A">98</span></div></td></tr>
+              <tr style="background:#F0FDF4"><td class="name">[LEAD] [FREE] [05/11] [LP]</td><td><span class="badge badge-warning">Pausada</span></td><td>Leads</td><td class="num">R$9.938</td><td class="num">508K</td><td class="num">16.253</td><td class="num">3,20%</td><td class="num" style="color:#16A34A;font-weight:700">3.252</td><td class="num" style="color:#16A34A;font-weight:700">R$3,06</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill good" style="width:95%"></div></div><span class="score-label" style="color:#16A34A">95</span></div></td></tr>
+              <tr style="background:#F0FDF4"><td class="name">[LEADS] [FREE] [Captacao Download] [09/12]</td><td><span class="badge badge-warning">Pausada</span></td><td>Leads</td><td class="num">R$9.233</td><td class="num">496K</td><td class="num">14.489</td><td class="num">2,92%</td><td class="num" style="color:#16A34A;font-weight:700">2.902</td><td class="num" style="color:#16A34A;font-weight:700">R$3,18</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill good" style="width:93%"></div></div><span class="score-label" style="color:#16A34A">93</span></div></td></tr>
+              <tr><td class="name">[Leads] Captacao Download — 05/09 (v1)</td><td><span class="badge badge-warning">Pausada</span></td><td>Leads</td><td class="num">R$5.746</td><td class="num">421K</td><td class="num">14.906</td><td class="num">3,54%</td><td class="num" style="font-weight:700">2.069</td><td class="num" style="color:#16A34A">R$2,78</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill good" style="width:90%"></div></div><span class="score-label" style="color:#16A34A">90</span></div></td></tr>
+              <tr><td class="name">[Leads] Captacao - Moto Pecas</td><td><span class="badge badge-warning">Pausada</span></td><td>Leads</td><td class="num">R$4.492</td><td class="num">439K</td><td class="num">10.588</td><td class="num">2,41%</td><td class="num" style="font-weight:700">1.408</td><td class="num">R$3,19</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill good" style="width:88%"></div></div><span class="score-label" style="color:#16A34A">88</span></div></td></tr>
+              <tr><td class="name">[LEADS] [05/09] MOTO PECAS [TESTE]</td><td><span class="badge badge-warning">Pausada</span></td><td>Leads</td><td class="num">R$5.989</td><td class="num">631K</td><td class="num">9.578</td><td class="num">1,52%</td><td class="num" style="font-weight:700">1.235</td><td class="num" style="color:#FFB800">R$4,85</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill good" style="width:82%"></div></div><span class="score-label" style="color:#16A34A">82</span></div></td></tr>
+              <tr><td class="name">[Leads] Captacao Download — 05/09 (v2)</td><td><span class="badge badge-warning">Pausada</span></td><td>Leads</td><td class="num">R$2.493</td><td class="num">201K</td><td class="num">6.385</td><td class="num">3,18%</td><td class="num">907</td><td class="num" style="color:#16A34A">R$2,75</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill good" style="width:85%"></div></div><span class="score-label" style="color:#16A34A">85</span></div></td></tr>
+              <tr><td class="name">[LEADS] [17/09] MOTO PECAS</td><td><span class="badge badge-warning">Pausada</span></td><td>Leads</td><td class="num">R$4.942</td><td class="num">560K</td><td class="num">7.910</td><td class="num">1,41%</td><td class="num">905</td><td class="num" style="color:#FFB800">R$5,46</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill ok" style="width:70%"></div></div><span class="score-label" style="color:#FFB800">70</span></div></td></tr>
+              <tr><td class="name">[LEADS] [15/10] MOTO PECAS - Conferir</td><td><span class="badge badge-warning">Pausada</span></td><td>Leads</td><td class="num">R$4.050</td><td class="num">396K</td><td class="num">5.875</td><td class="num">1,48%</td><td class="num">741</td><td class="num" style="color:#FFB800">R$5,47</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill ok" style="width:68%"></div></div><span class="score-label" style="color:#FFB800">68</span></div></td></tr>
+              <tr><td class="name">[Leads] Captacao Download — Matcom</td><td><span class="badge badge-warning">Pausada</span></td><td>Leads</td><td class="num">R$3.686</td><td class="num">225K</td><td class="num">4.334</td><td class="num">1,93%</td><td class="num">448</td><td class="num" style="color:#DC2626">R$8,23</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill ok" style="width:55%"></div></div><span class="score-label" style="color:#FFB800">55</span></div></td></tr>
+              <tr><td class="name">[CADASTRO] [07/08] MERCADO SIMILARES</td><td><span class="badge badge-warning">Pausada</span></td><td>Leads</td><td class="num">R$2.161</td><td class="num">71K</td><td class="num">2.063</td><td class="num">2,92%</td><td class="num">283</td><td class="num" style="color:#FFB800">R$7,64</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill ok" style="width:60%"></div></div><span class="score-label" style="color:#FFB800">60</span></div></td></tr>
+              <tr><td class="name">[CADASTRO] [05/09] MERCADO SIMILARES</td><td><span class="badge badge-warning">Pausada</span></td><td>Leads</td><td class="num">R$1.235</td><td class="num">43K</td><td class="num">1.191</td><td class="num">2,74%</td><td class="num">213</td><td class="num" style="color:#FFB800">R$5,80</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill ok" style="width:65%"></div></div><span class="score-label" style="color:#FFB800">65</span></div></td></tr>
+              <tr><td class="name">Mercado e Similares (Emoji)</td><td><span class="badge badge-warning">Pausada</span></td><td>Leads</td><td class="num">R$1.507</td><td class="num">72K</td><td class="num">1.104</td><td class="num">1,53%</td><td class="num">132</td><td class="num" style="color:#DC2626">R$11,42</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill ok" style="width:42%"></div></div><span class="score-label" style="color:#FFB800">42</span></div></td></tr>
+              <tr style="background:#FEF2F2"><td class="name">Moda e Calcados (Emoji)</td><td><span class="badge badge-warning">Pausada</span></td><td>Leads</td><td class="num">R$763</td><td class="num">41K</td><td class="num">564</td><td class="num">1,36%</td><td class="num">42</td><td class="num" style="color:#DC2626;font-weight:700">R$18,16</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill bad" style="width:20%"></div></div><span class="score-label" style="color:#DC2626">20</span></div></td></tr>
+              <tr style="background:#FEF2F2"><td class="name">[VENDAS] Aniversario 2 Anos [LP]</td><td><span class="badge badge-warning">Pausada</span></td><td>Vendas</td><td class="num">R$1.110</td><td class="num">34K</td><td class="num">283</td><td class="num">0,83%</td><td class="num">15</td><td class="num" style="color:#DC2626;font-weight:700">R$74,03</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill bad" style="width:8%"></div></div><span class="score-label" style="color:#DC2626">8</span></div></td></tr>
+              <tr style="background:#FEF2F2"><td class="name">[VENDAS] PV-CHECK [ESTOQUE]</td><td><span class="badge badge-warning">Pausada</span></td><td>Vendas</td><td class="num">R$447</td><td class="num">11K</td><td class="num">234</td><td class="num">2,07%</td><td class="num">10</td><td class="num" style="color:#DC2626;font-weight:700">R$44,68</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill bad" style="width:10%"></div></div><span class="score-label" style="color:#DC2626">10</span></div></td></tr>
+              <tr style="background:#FEF2F2"><td class="name">[VENDAS] Aniversario [PUBLICO SALVO]</td><td><span class="badge badge-warning">Pausada</span></td><td>Vendas</td><td class="num">R$285</td><td class="num">10K</td><td class="num">86</td><td class="num">0,85%</td><td class="num">3</td><td class="num" style="color:#DC2626;font-weight:700">R$94,98</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill bad" style="width:5%"></div></div><span class="score-label" style="color:#DC2626">5</span></div></td></tr>
+            </tbody>
+            <tfoot><tr><td colspan="3">TOTAL (25 campanhas)</td><td class="num">R$77.955</td><td class="num">5.8M</td><td class="num">161K</td><td class="num">2,77%</td><td class="num">21.833</td><td class="num">R$3,57</td><td></td></tr></tfoot>
+          </table>
+        </div>
+
+        <div style="margin-top:20px">
+          <h2 class="section-title"><span class="icon">insights</span> Insights do Historico</h2>
+          <div class="charts-grid">
+            <div class="chart-card"><h3><span class="icon">leaderboard</span> Top 5 Campanhas por Volume de Leads (All-Time)</h3><div class="chart-wrap"><canvas id="chartHistoryLeads"></canvas></div></div>
+            <div class="chart-card"><h3><span class="icon">price_change</span> CPL Historico por Tipo de Campanha</h3><div class="chart-wrap"><canvas id="chartHistoryCPL"></canvas></div></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== TAB 3: CREATIVES ==================== -->
+    <div id="tab-creatives" class="tab-content">
+      <section class="section">
+        <h2 class="section-title"><span class="icon">palette</span> Analise de Criativos Ativos</h2>
+        <p class="section-desc">7 criativos unicos com copy identificado + dynamic product ads nas campanhas MATCOM e MOTO PECAS.</p>
+
+        <div class="banner warn"><span class="icon">warning</span><strong>Problema:</strong>&nbsp;Todos os criativos da campanha FREE 02/07 usam texto longo (150+ palavras). Textos curtos e diretos convertem melhor em feeds mobile.</div>
+
+        <div class="creative-grid">
+          <!-- Creative 1 -->
+          <div class="creative-card">
+            <div class="cc-header"><h4>NF sem Burocracia? E possivel!</h4><span class="badge badge-success">CTA: SIGN_UP</span></div>
+            <div class="cc-body">Cansado da montanha de papelada e das horas perdidas com a emissao de notas fiscais? Sabemos que a burocracia pode ser um verdadeiro pesadelo para o pequeno lojista do Simples Nacional... Com o Gestao Mais Simples, voce emite notas fiscais ilimitadas de forma rapida e intuitiva.</div>
+            <div class="cc-meta">
+              <span class="cc-tag">LP: /lp/sistemagratis</span>
+              <span class="cc-tag">Campanha: FREE 02/07</span>
+              <span class="cc-tag">Imagem estatica</span>
+              <span class="cc-tag" style="background:#FFFBEB;color:#92400E">173 palavras</span>
+            </div>
+            <div class="cc-stats">
+              <div><div class="cc-stat-label">Leads</div><div class="cc-stat-value" style="color:#999">~0</div></div>
+              <div><div class="cc-stat-label">Spend</div><div class="cc-stat-value">R$1</div></div>
+              <div><div class="cc-stat-label">Angulo</div><div class="cc-stat-value" style="font-size:11px">NF/Burocracia</div></div>
+              <div><div class="cc-stat-label">Status</div><div class="cc-stat-value" style="color:#DC2626;font-size:11px">Sem entrega</div></div>
+            </div>
+          </div>
+
+          <!-- Creative 2 -->
+          <div class="creative-card">
+            <div class="cc-header"><h4>Cansado de mil planilhas e sistemas?</h4><span class="badge badge-info">CTA: LEARN_MORE</span></div>
+            <div class="cc-body">Pequenas lojas do Simples Nacional, chega de fragmentar sua gestao! Voce se desdobra entre planilhas de estoque, sistemas de notas e contas a pagar... O "Gestao Mais Simples" da Sismais e a solucao completa e GRATIS que sua loja precisa.</div>
+            <div class="cc-meta">
+              <span class="cc-tag">LP: /lp/sistemagratis</span>
+              <span class="cc-tag">Campanha: FREE 02/07</span>
+              <span class="cc-tag">Imagem estatica</span>
+              <span class="cc-tag" style="background:#FEF2F2;color:#DC2626">208 palavras</span>
+            </div>
+            <div class="cc-stats">
+              <div><div class="cc-stat-label">Leads</div><div class="cc-stat-value" style="color:#999">~0</div></div>
+              <div><div class="cc-stat-label">Spend</div><div class="cc-stat-value">R$1</div></div>
+              <div><div class="cc-stat-label">Angulo</div><div class="cc-stat-value" style="font-size:11px">Planilhas/Tudo-em-1</div></div>
+              <div><div class="cc-stat-label">Status</div><div class="cc-stat-value" style="color:#DC2626;font-size:11px">Sem entrega</div></div>
+            </div>
+          </div>
+
+          <!-- Creative 3 -->
+          <div class="creative-card">
+            <div class="cc-header"><h4>Estoque sob controle, lucro no bolso!</h4><span class="badge badge-info">CTA: LEARN_MORE</span></div>
+            <div class="cc-body">Cansado de perder vendas por falta de produto ou de ter capital parado com estoque obsoleto? A gestao manual do seu estoque esta te causando prejuizo... Com o Gestao Mais Simples, voce otimiza seu controle de estoque de forma gratuita.</div>
+            <div class="cc-meta">
+              <span class="cc-tag">LP: /lp/sistemagratis</span>
+              <span class="cc-tag">Campanha: FREE 02/07</span>
+              <span class="cc-tag">Imagem estatica</span>
+              <span class="cc-tag" style="background:#FFFBEB;color:#92400E">98 palavras</span>
+            </div>
+            <div class="cc-stats">
+              <div><div class="cc-stat-label">Leads</div><div class="cc-stat-value" style="color:#999">~0</div></div>
+              <div><div class="cc-stat-label">Spend</div><div class="cc-stat-value">R$0</div></div>
+              <div><div class="cc-stat-label">Angulo</div><div class="cc-stat-value" style="font-size:11px">Estoque</div></div>
+              <div><div class="cc-stat-label">Status</div><div class="cc-stat-value" style="color:#DC2626;font-size:11px">Sem entrega</div></div>
+            </div>
+          </div>
+
+          <!-- Creative 4 -->
+          <div class="creative-card">
+            <div class="cc-header"><h4>Gestao GRATUITA de Verdade!</h4><span class="badge badge-info">CTA: LEARN_MORE</span></div>
+            <div class="cc-body">Cansado de sistemas de gestao caros que minam o lucro da sua pequena loja? O alto custo de um software eficiente nao precisa ser um obstaculo... Controle financeiro, emissao ILIMITADA de notas fiscais, gestao de estoque e ordens de servico.</div>
+            <div class="cc-meta">
+              <span class="cc-tag">LP: /lp/sistemagratis</span>
+              <span class="cc-tag">Campanha: FREE 02/07</span>
+              <span class="cc-tag">Imagem estatica</span>
+              <span class="cc-tag" style="background:#FFFBEB;color:#92400E">127 palavras</span>
+            </div>
+            <div class="cc-stats">
+              <div><div class="cc-stat-label">Leads</div><div class="cc-stat-value" style="color:#999">~0</div></div>
+              <div><div class="cc-stat-label">Spend</div><div class="cc-stat-value">R$0</div></div>
+              <div><div class="cc-stat-label">Angulo</div><div class="cc-stat-value" style="font-size:11px">Preco/Gratis</div></div>
+              <div><div class="cc-stat-label">Status</div><div class="cc-stat-value" style="color:#DC2626;font-size:11px">Sem entrega</div></div>
+            </div>
+          </div>
+
+          <!-- Creative 5 -->
+          <div class="creative-card">
+            <div class="cc-header"><h4>Gestao Gratuita? Sim! Sismais Chegou!</h4><span class="badge badge-success">CTA: SIGN_UP</span></div>
+            <div class="cc-body">Cansado de sistemas de gestao caros que pesam no seu orcamento? Pequenas empresas e MEIs, temos a solucao! O Gestao Mais Simples da Sismais oferece todas as funcionalidades que voce precisa – emissao ilimitada de NF-e...</div>
+            <div class="cc-meta">
+              <span class="cc-tag">LP: /lp/sistemagratis</span>
+              <span class="cc-tag">Campanha: FREE 02/07</span>
+              <span class="cc-tag">Imagem estatica</span>
+              <span class="cc-tag" style="background:#FFFBEB;color:#92400E">151 palavras</span>
+            </div>
+            <div class="cc-stats">
+              <div><div class="cc-stat-label">Leads</div><div class="cc-stat-value" style="color:#999">~0</div></div>
+              <div><div class="cc-stat-label">Spend</div><div class="cc-stat-value">R$2</div></div>
+              <div><div class="cc-stat-label">Angulo</div><div class="cc-stat-value" style="font-size:11px">Custo Zero</div></div>
+              <div><div class="cc-stat-label">Status</div><div class="cc-stat-value" style="color:#DC2626;font-size:11px">Sem entrega</div></div>
+            </div>
+          </div>
+
+          <!-- Creative 6 -->
+          <div class="creative-card">
+            <div class="cc-header"><h4>Chega de Caos Financeiro!</h4><span class="badge badge-success">CTA: SIGN_UP</span></div>
+            <div class="cc-body">Pequeno empresario, cansado de perder o controle das suas financas? Sabemos que a desorganizacao financeira pode ser um pesadelo... Com o "Gestao Mais Simples", um sistema de gestao gratuito e completo.</div>
+            <div class="cc-meta">
+              <span class="cc-tag">LP: /lp/sistemagratis</span>
+              <span class="cc-tag">Campanha: FREE 02/07</span>
+              <span class="cc-tag">Imagem estatica</span>
+              <span class="cc-tag" style="background:#FFFBEB;color:#92400E">137 palavras</span>
+            </div>
+            <div class="cc-stats">
+              <div><div class="cc-stat-label">Leads</div><div class="cc-stat-value" style="color:#16A34A">1</div></div>
+              <div><div class="cc-stat-label">Spend</div><div class="cc-stat-value">R$1</div></div>
+              <div><div class="cc-stat-label">Angulo</div><div class="cc-stat-value" style="font-size:11px">Financeiro</div></div>
+              <div><div class="cc-stat-label">CPL</div><div class="cc-stat-value" style="color:#16A34A;font-size:11px">R$0,54!</div></div>
+            </div>
+          </div>
+
+          <!-- Creative 7: Dynamic -->
+          <div class="creative-card">
+            <div class="cc-header"><h4>Dynamic Product Ads (MOTO PECAS + MATCOM)</h4><span class="badge badge-navy">Catalogo</span></div>
+            <div class="cc-body" style="max-height:none"><strong>Variante MERCADO:</strong> 3 bodies diferentes com emojis, 3 titulos, 4 imagens. LP: /lp/supermercados. CTA: LEARN_MORE.<br><br><strong>Variante MATCOM:</strong> Dynamic product feed. Sem body fixo — usa {{product.name}}.<br><br><strong>Variante MOTO PECAS:</strong> Dynamic product feed. Sem body fixo — usa {{product.name}}.</div>
+            <div class="cc-meta">
+              <span class="cc-tag" style="background:#F0FDF4;color:#16A34A;border-color:#16A34A">Melhor performance!</span>
+              <span class="cc-tag">MOTO PECAS: 581 leads</span>
+              <span class="cc-tag">MATCOM: 134 leads</span>
+              <span class="cc-tag">Asset Feed Spec</span>
+            </div>
+            <div class="cc-stats">
+              <div><div class="cc-stat-label">Total Leads</div><div class="cc-stat-value" style="color:#16A34A">715+</div></div>
+              <div><div class="cc-stat-label">CPL Medio</div><div class="cc-stat-value" style="color:#16A34A">R$3-11</div></div>
+              <div><div class="cc-stat-label">Formato</div><div class="cc-stat-value" style="font-size:11px">Dynamic</div></div>
+              <div><div class="cc-stat-label">Veredito</div><div class="cc-stat-value" style="color:#16A34A;font-size:11px">Escalar</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Creative Insights -->
+        <div style="margin-top:24px">
+          <h2 class="section-title"><span class="icon">psychology</span> Diagnostico dos Criativos</h2>
+          <div class="reco-grid">
+            <div class="reco-card critical">
+              <h4><span class="icon icon-sm" style="color:#DC2626">error</span> Criativos longos nao recebem entrega</h4>
+              <p>Os 6 criativos com copy de 100-208 palavras da campanha FREE 02/07 quase nao recebem impressoes. O algoritmo prioriza o "02 - Sistema Simples e Gratuito" (dynamic) que concentra 95%+ do orcamento. <strong>Os criativos estaticos estao mortos na pratica.</strong></p>
+            </div>
+            <div class="reco-card optimize">
+              <h4><span class="icon icon-sm" style="color:#45E5E5">auto_fix_high</span> Dynamic Ads dominam a performance</h4>
+              <p>Tanto MOTO PECAS (581 leads) quanto MATCOM (134 leads) usam <strong>dynamic product ads</strong> com asset_feed_spec. O Meta otimiza automaticamente a combinacao de imagem+titulo+body. Este formato e claramente superior aos criativos manuais.</p>
+            </div>
+            <div class="reco-card important">
+              <h4><span class="icon icon-sm" style="color:#FFB800">content_copy</span> Todos os angulos sao iguais</h4>
+              <p>Os 6 criativos manuais falam a mesma coisa: "cansado de X? o GMS resolve". Nao ha variacao real de angulo. Falta: <strong>prova social</strong> (depoimentos), <strong>numeros concretos</strong> ("3.000 lojas usam"), <strong>urgencia</strong> ou <strong>video demonstrativo</strong>.</p>
+            </div>
+            <div class="reco-card growth">
+              <h4><span class="icon icon-sm" style="color:#16A34A">videocam</span> Oportunidade: Video de 15-30s</h4>
+              <p>Nenhum criativo ativo usa video. Um video curto mostrando o cadastro em 5 min + emissao de NF pode reduzir o CPL em 20-40%. O angulo "5 minutos" do Post Instagram teve CTR de 5,68% — o melhor da conta.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== TAB 4: ADS ==================== -->
+    <div id="tab-ads" class="tab-content">
+      <section class="section">
+        <h2 class="section-title"><span class="icon">ads_click</span> Performance por Anuncio (Ultimos 30 dias)</h2>
+        <p class="section-desc">27 anuncios ativos. Apenas 5 concentram 99% dos leads e investimento.</p>
+
+        <div class="banner warn"><span class="icon">warning</span><strong>Alerta:</strong>&nbsp;22 dos 27 anuncios ativos geraram 0 leads nos ultimos 30 dias. Eles recebem quase zero de orcamento (o algoritmo os abandonou).</div>
+
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Anuncio</th><th>Campanha</th><th class="r">Invest.</th><th class="r">Cliques</th><th class="r">CTR</th><th class="r">Leads</th><th class="r">CPL</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr style="background:#F0FDF4"><td class="name">02 - ativo</td><td>MOTO PECAS</td><td class="num">R$1.792</td><td class="num">4.988</td><td class="num">1,85%</td><td class="num" style="color:#16A34A;font-weight:700">581</td><td class="num" style="color:#16A34A;font-weight:700">R$3,08</td><td><span class="badge badge-success">Campeao</span></td></tr>
+              <tr><td class="name">02 - Sistema Simples e Gratuito</td><td>FREE 02/07</td><td class="num">R$2.064</td><td class="num">6.354</td><td class="num">2,57%</td><td class="num" style="font-weight:700">213</td><td class="num" style="color:#FFB800">R$9,69</td><td><span class="badge badge-info">Principal</span></td></tr>
+              <tr><td class="name">02 - Sistema Simples e Gratuito</td><td>FREE 05/11</td><td class="num">R$1.488</td><td class="num">4.084</td><td class="num">2,80%</td><td class="num" style="font-weight:700">113</td><td class="num" style="color:#DC2626">R$13,17</td><td><span class="badge badge-warning">Caro</span></td></tr>
+              <tr><td class="name">AD3 (Semelhante 1%)</td><td>MATCOM MQL</td><td class="num">R$944</td><td class="num">2.069</td><td class="num">3,37%</td><td class="num" style="font-weight:700">77</td><td class="num" style="color:#DC2626">R$12,26</td><td><span class="badge badge-warning">Caro</span></td></tr>
+              <tr><td class="name">AN1 - IMAGEM 2</td><td>MERCADO SIM.</td><td class="num">R$895</td><td class="num">2.664</td><td class="num">3,30%</td><td class="num" style="font-weight:700">75</td><td class="num" style="color:#DC2626">R$11,94</td><td><span class="badge badge-warning">Caro</span></td></tr>
+              <tr><td class="name">AD3 (Semelhante 3%)</td><td>MATCOM MQL</td><td class="num">R$387</td><td class="num">759</td><td class="num">2,70%</td><td class="num">30</td><td class="num" style="color:#DC2626">R$12,91</td><td><span class="badge badge-warning">Caro</span></td></tr>
+              <tr><td class="name">AD 1 (Semelhante 1%)</td><td>MATCOM MQL</td><td class="num">R$38</td><td class="num">62</td><td class="num">3,34%</td><td class="num">14</td><td class="num" style="color:#16A34A;font-weight:600">R$2,69</td><td><span class="badge badge-purple">Potencial</span></td></tr>
+              <tr><td class="name">AD2 (Semelhante 1%)</td><td>MATCOM MQL</td><td class="num">R$70</td><td class="num">170</td><td class="num">3,23%</td><td class="num">11</td><td class="num" style="color:#16A34A;font-weight:600">R$6,36</td><td><span class="badge badge-purple">Potencial</span></td></tr>
+              <tr><td colspan="8" style="text-align:center;color:#999;font-style:italic;padding:16px">... +17 anuncios com 0 leads (total R$22 investidos) ...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== TAB 5: LINKS ==================== -->
+    <div id="tab-links" class="tab-content">
+      <section class="section">
+        <h2 class="section-title"><span class="icon">link</span> Verificacao de Links e Landing Pages</h2>
+        <p class="section-desc">Todas as campanhas ativas apontam para 2 landing pages. Verificacao automatizada via navegador.</p>
+
+        <div class="link-card">
+          <div class="link-status ok"><span class="icon icon-lg">check_circle</span></div>
+          <div class="link-info">
+            <div class="link-url">https://lp.gestaomaissimples.com.br/lp/sistemagratis</div>
+            <div class="link-detail">LP principal — usada por 5 das 6 campanhas ativas</div>
+            <div class="link-used">Campanhas: FREE 02/07, FREE 05/11, MATCOM MQL, Post Instagram</div>
+          </div>
+          <span class="badge badge-success">Ativa</span>
+        </div>
+
+        <div class="link-card">
+          <div class="link-status ok"><span class="icon icon-lg">check_circle</span></div>
+          <div class="link-info">
+            <div class="link-url">https://lp.gestaomaissimples.com.br/lp/supermercados</div>
+            <div class="link-detail">LP segmentada para supermercados/mercados</div>
+            <div class="link-used">Campanha: MERCADO E SIMILARES 2 (via asset feed)</div>
+          </div>
+          <span class="badge badge-success">Ativa</span>
+        </div>
+
+        <div style="margin-top:24px">
+          <h2 class="section-title"><span class="icon">speed</span> Analise de Conversao LP → Lead</h2>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Campanha</th><th>Landing Page</th><th class="r">LP Views</th><th class="r">Leads</th><th class="r">Taxa Conversao</th><th>Avaliacao</th></tr></thead>
+              <tbody>
+                <tr><td class="name">MATCOM MQL</td><td>/lp/sistemagratis</td><td class="num">161</td><td class="num">134</td><td class="num" style="color:#16A34A;font-weight:700">83,2%</td><td><span class="badge badge-success">Excelente</span></td></tr>
+                <tr><td class="name">MOTO PECAS</td><td>/lp/supermercados</td><td class="num">465</td><td class="num">585</td><td class="num" style="color:#16A34A;font-weight:700">125%*</td><td><span class="badge badge-info">Form Meta</span></td></tr>
+                <tr><td class="name">FREE 02/07</td><td>/lp/sistemagratis</td><td class="num">589</td><td class="num">227</td><td class="num" style="color:#FFB800;font-weight:600">38,5%</td><td><span class="badge badge-warning">Melhorar</span></td></tr>
+                <tr><td class="name">FREE 05/11</td><td>/lp/sistemagratis</td><td class="num">242</td><td class="num">113</td><td class="num" style="color:#FFB800;font-weight:600">46,7%</td><td><span class="badge badge-warning">Melhorar</span></td></tr>
+                <tr><td class="name">MERCADO SIM.</td><td>/lp/supermercados</td><td class="num">226</td><td class="num">75</td><td class="num" style="color:#FFB800;font-weight:600">33,2%</td><td><span class="badge badge-warning">Melhorar</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size:11px;color:#999;margin-top:8px">* Mais leads que LP views indica que parte dos leads vem de formularios nativos do Meta (nao passa pela LP).</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== TAB 6: RECOMMENDATIONS ==================== -->
+    <div id="tab-reco" class="tab-content">
+      <section class="section">
+        <h2 class="section-title"><span class="icon">auto_fix_high</span> Plano de Acao — 15 Recomendacoes Priorizadas</h2>
+
+        <h3 style="color:#DC2626;font-size:15px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px"><span class="icon icon-sm" style="color:#DC2626">priority_high</span> Prioridade 1 — Fazer HOJE (15 min)</h3>
+        <div class="reco-grid" style="margin-bottom:24px">
+          <div class="reco-card critical">
+            <h4>1. Pausar "Post Instagram 5 min"</h4>
+            <p>0 leads em 30 dias. R$156 desperdicados. Campanha de Link Clicks nao gera leads — objetivo errado.</p>
+            <div class="reco-impact" style="color:#DC2626">Economia: R$330/mes</div>
+          </div>
+          <div class="reco-card critical">
+            <h4>2. Reduzir FREE 05/11 de R$50 → R$25/dia</h4>
+            <p>CPL R$13,17 — o mais caro entre campanhas de leads. Mesmo criativo que FREE 02/07 mas com performance 40% pior. Redirecione para MOTO PECAS.</p>
+            <div class="reco-impact" style="color:#DC2626">Economia: R$750/mes redirecionados</div>
+          </div>
+          <div class="reco-card critical">
+            <h4>3. Escalar MOTO PECAS de R$60 → R$100/dia</h4>
+            <p>CPL R$3,06 — melhor campanha ativa. Um unico anuncio ("02 - ativo") carrega toda a performance. Aumente gradualmente 20%/semana.</p>
+            <div class="reco-impact" style="color:#DC2626">Impacto: +150 leads/mes estimados</div>
+          </div>
+        </div>
+
+        <h3 style="color:#FFB800;font-size:15px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px"><span class="icon icon-sm" style="color:#FFB800">trending_up</span> Prioridade 2 — Esta Semana</h3>
+        <div class="reco-grid" style="margin-bottom:24px">
+          <div class="reco-card important">
+            <h4>4. Remover criativos mortos da FREE 02/07</h4>
+            <p>6 criativos manuais com 0 leads. O algoritmo ja os abandonou. Remova para o ad set focar 100% no criativo que funciona e evitar fragmentacao de aprendizado.</p>
+            <div class="reco-impact" style="color:#FFB800">Impacto: Melhora na fase de aprendizado</div>
+          </div>
+          <div class="reco-card important">
+            <h4>5. Testar "AD 1" do MATCOM com mais orcamento</h4>
+            <p>AD 1 tem CPL de R$2,69 com 14 leads, mas recebe pouco orcamento (R$38). Pode ser o proximo campeao — duplique o ad set e teste com R$25/dia isolado.</p>
+            <div class="reco-impact" style="color:#FFB800">Impacto: Potencial CPL 4x menor que AD3</div>
+          </div>
+          <div class="reco-card important">
+            <h4>6. Limitar idade 18-54 nas campanhas caras</h4>
+            <p>Faixa 55+ tem CPL R$8,50 vs R$6,43 (35-44). Nas campanhas MATCOM e MERCADO, limite a idade max para 54. Mantenha MOTO PECAS aberto (funciona).</p>
+            <div class="reco-impact" style="color:#FFB800">Economia: ~R$300/mes</div>
+          </div>
+          <div class="reco-card important">
+            <h4>7. Criar lookalike de Purchase (nao Lead)</h4>
+            <p>25 compras registradas no pixel. Crie audiencia 1% baseada em compradores reais — leads de maior qualidade e intencao. Use nas campanhas MATCOM e FREE.</p>
+            <div class="reco-impact" style="color:#FFB800">Impacto: Leads mais qualificados</div>
+          </div>
+        </div>
+
+        <h3 style="color:#45E5E5;font-size:15px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px"><span class="icon icon-sm" style="color:#10293F">science</span> Prioridade 3 — Proximas 2 Semanas</h3>
+        <div class="reco-grid" style="margin-bottom:24px">
+          <div class="reco-card optimize">
+            <h4>8. Criar video curto "Cadastre em 5 min"</h4>
+            <p>Nenhum criativo ativo usa video. O angulo "5 minutos" teve CTR 5,68%. Grave tela do GMS: cadastro → primeira NF em 5 min. Videos reduzem CPL 20-40% em SaaS.</p>
+            <div class="reco-impact" style="color:#10293F">Impacto: Potencialmente -30% CPL</div>
+          </div>
+          <div class="reco-card optimize">
+            <h4>9. Criar campanha de Remarketing</h4>
+            <p>2.170 LP views + 882K impressoes = enorme pool de visitantes. Crie remarketing para visitors LP 30 dias que NAO sao leads. CPL de remarketing e 50%+ menor.</p>
+            <div class="reco-impact" style="color:#10293F">Impacto: Leads quentes a custo baixo</div>
+          </div>
+          <div class="reco-card optimize">
+            <h4>10. Otimizar LP /lp/sistemagratis</h4>
+            <p>Taxa de conversao de 38% (FREE 02/07) vs 83% (MATCOM). Simplifique: menos campos, mais prova social, video acima da dobra. Cada 10% de melhoria = +50 leads/mes gratis.</p>
+            <div class="reco-impact" style="color:#10293F">Impacto: +20-30% leads sem investir mais</div>
+          </div>
+          <div class="reco-card optimize">
+            <h4>11. Reativar estrategia "Captacao e Download"</h4>
+            <p>A campanha original (2022-2024) gerou <strong>7.181 leads a R$2,49</strong> — o melhor resultado historico. Entenda o que mudou e considere reativar o mesmo formato com publicos atualizados.</p>
+            <div class="reco-impact" style="color:#10293F">Impacto: Recuperar formula vencedora</div>
+          </div>
+          <div class="reco-card optimize">
+            <h4>12. Testar segmento masculino 25-44 isolado</h4>
+            <p>85% dos leads sao homens com CPL 18% menor. Crie ad set masculino 25-44 em MATCOM com copy especifico para donos de comercio.</p>
+            <div class="reco-impact" style="color:#10293F">Impacto: -12% CPL estimado</div>
+          </div>
+        </div>
+
+        <h3 style="color:#16A34A;font-size:15px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px"><span class="icon icon-sm" style="color:#16A34A">rocket_launch</span> Prioridade 4 — Estrategico</h3>
+        <div class="reco-grid">
+          <div class="reco-card growth">
+            <h4>13. Implementar lead scoring pos-captura</h4>
+            <p>585 leads MOTO PECAS a R$3 podem ter baixa qualidade. Integre CRM + WhatsApp para medir taxa de qualificacao real por campanha. Otimize por ROI, nao CPL.</p>
+          </div>
+          <div class="reco-card growth">
+            <h4>14. Evitar campanhas de VENDAS</h4>
+            <p>Historico: todas as 6 campanhas de VENDAS tiveram CPL >R$26 (ate R$95). O pixel nao tem volume suficiente de compras para otimizar. Mantenha foco em LEADS.</p>
+          </div>
+          <div class="reco-card growth">
+            <h4>15. Nao expandir para Moda/Calcados</h4>
+            <p>Teste historico: 42 leads a R$18,16 — CPL 7x maior que a media. Este segmento nao converte para o GMS. Foque em mercados, auto pecas e comercio geral.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Summary Table -->
+      <section class="section" style="margin-top:24px">
+        <h2 class="section-title"><span class="icon">checklist</span> Resumo do Plano de Acao</h2>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>P</th><th>Acao</th><th>Impacto</th><th>Esforco</th></tr></thead>
+            <tbody>
+              <tr><td><span class="badge badge-error">P1</span></td><td>Pausar Post Instagram 5 min</td><td class="num">+R$330/mes</td><td><span class="badge badge-success">5 min</span></td></tr>
+              <tr><td><span class="badge badge-error">P1</span></td><td>Reduzir FREE 05/11 R$50→R$25/dia</td><td class="num">+R$750/mes</td><td><span class="badge badge-success">5 min</span></td></tr>
+              <tr><td><span class="badge badge-error">P1</span></td><td>Escalar MOTO PECAS R$60→R$100/dia</td><td class="num">+150 leads/mes</td><td><span class="badge badge-success">5 min</span></td></tr>
+              <tr><td><span class="badge badge-warning">P2</span></td><td>Remover criativos mortos FREE 02/07</td><td class="num">Aprendizado melhor</td><td><span class="badge badge-success">15 min</span></td></tr>
+              <tr><td><span class="badge badge-warning">P2</span></td><td>Testar AD 1 do MATCOM isolado</td><td class="num">CPL potencial R$2,69</td><td><span class="badge badge-warning">30 min</span></td></tr>
+              <tr><td><span class="badge badge-warning">P2</span></td><td>Limitar idade max 54 (MATCOM/MERCADO)</td><td class="num">-R$300/mes</td><td><span class="badge badge-success">15 min</span></td></tr>
+              <tr><td><span class="badge badge-warning">P2</span></td><td>Criar lookalike Purchase 1%</td><td class="num">Leads qualificados</td><td><span class="badge badge-warning">30 min</span></td></tr>
+              <tr><td><span class="badge badge-info">P3</span></td><td>Criar video 15-30s "Cadastre em 5 min"</td><td class="num">-30% CPL potencial</td><td><span class="badge badge-error">4h+</span></td></tr>
+              <tr><td><span class="badge badge-info">P3</span></td><td>Campanha de Remarketing LP visitors</td><td class="num">Leads quentes</td><td><span class="badge badge-warning">1h</span></td></tr>
+              <tr><td><span class="badge badge-info">P3</span></td><td>Otimizar LP /sistemagratis</td><td class="num">+20-30% leads</td><td><span class="badge badge-error">3h</span></td></tr>
+              <tr><td><span class="badge badge-info">P3</span></td><td>Reativar "Captacao e Download"</td><td class="num">CPL R$2,49 historico</td><td><span class="badge badge-warning">1h</span></td></tr>
+              <tr><td><span class="badge badge-info">P3</span></td><td>Ad set masculino 25-44</td><td class="num">-12% CPL</td><td><span class="badge badge-warning">30 min</span></td></tr>
+              <tr><td><span class="badge badge-purple">P4</span></td><td>Lead scoring pos-captura</td><td class="num">ROI real</td><td><span class="badge badge-error">Estrategico</span></td></tr>
+              <tr><td><span class="badge badge-purple">P4</span></td><td>Evitar campanhas VENDAS</td><td class="num">Evita desperdicio</td><td><span class="badge badge-success">Regra</span></td></tr>
+              <tr><td><span class="badge badge-purple">P4</span></td><td>Nao expandir Moda/Calcados</td><td class="num">Evita desperdicio</td><td><span class="badge badge-success">Regra</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align:center; padding: 32px 0 8px; color: #999; font-size: 12px;">
+      Relatorio gerado por Claude AI para Sismais Tecnologia — 21/03/2026<br>
+      Dados: Facebook Ads API | Conta: Mais Simples ADS (act_486452446836316) | Periodo: All-time + ultimos 30 dias
+    </div>
+  </div>
+
+  <script>
+    // Tab switching
+    function switchTab(id) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      event.target.closest('.tab-btn').classList.add('active');
+    }
+
+    // Chart defaults
+    Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+    Chart.defaults.font.size = 12;
+    Chart.defaults.color = '#666';
+    const C = { navy:'#10293F', cyan:'#45E5E5', yellow:'#FFB800', green:'#16A34A', red:'#DC2626', purple:'#7C3AED', blue:'#2563EB' };
+
+    // Daily Trend
+    const daily = [
+      {d:'19/02',s:285,l:35},{d:'20/02',s:258,l:22},{d:'21/02',s:256,l:22},{d:'22/02',s:297,l:34},
+      {d:'23/02',s:282,l:28},{d:'24/02',s:273,l:39},{d:'25/02',s:271,l:46},{d:'26/02',s:269,l:50},
+      {d:'27/02',s:262,l:48},{d:'28/02',s:241,l:45},{d:'01/03',s:304,l:52},{d:'02/03',s:176,l:21},
+      {d:'03/03',s:114,l:31},{d:'04/03',s:348,l:44},{d:'05/03',s:332,l:40},{d:'06/03',s:308,l:37},
+      {d:'07/03',s:286,l:39},{d:'08/03',s:301,l:24},{d:'09/03',s:274,l:56},{d:'10/03',s:283,l:40},
+      {d:'11/03',s:239,l:29},{d:'12/03',s:254,l:37},{d:'13/03',s:236,l:41},{d:'14/03',s:233,l:38},
+      {d:'15/03',s:307,l:58}
+    ];
+    new Chart(document.getElementById('chartDaily'), {
+      type:'bar', data:{
+        labels:daily.map(d=>d.d),
+        datasets:[
+          {label:'Investimento (R$)',data:daily.map(d=>d.s),backgroundColor:'rgba(16,41,63,0.15)',borderColor:C.navy,borderWidth:1,borderRadius:4,yAxisID:'y',order:2},
+          {label:'Leads',data:daily.map(d=>d.l),type:'line',borderColor:C.cyan,backgroundColor:'rgba(69,229,229,0.1)',fill:true,tension:0.3,pointRadius:3,pointBackgroundColor:C.cyan,borderWidth:2.5,yAxisID:'y1',order:1}
+        ]
+      },options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:16}}},scales:{y:{position:'left',title:{display:true,text:'R$'},grid:{color:'#f0f0f0'}},y1:{position:'right',title:{display:true,text:'Leads'},grid:{drawOnChartArea:false}},x:{grid:{display:false},ticks:{maxRotation:45}}}}
+    });
+
+    // Pie
+    new Chart(document.getElementById('chartPie'), {
+      type:'doughnut', data:{labels:['MOTO PECAS','FREE 02/07','MATCOM','FREE 05/11','MERCADO'],datasets:[{data:[585,227,134,113,75],backgroundColor:[C.cyan,C.navy,C.blue,C.yellow,C.purple],borderWidth:2,borderColor:'#fff'}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{usePointStyle:true,padding:10,font:{size:11}}}}}
+    });
+
+    // CPL
+    new Chart(document.getElementById('chartCPL'), {
+      type:'bar', data:{labels:['MOTO PECAS','FREE 02/07','MATCOM','MERCADO','FREE 05/11'],datasets:[{label:'CPL (R$)',data:[3.06,9.38,11.15,11.94,13.17],backgroundColor:['rgba(69,229,229,0.8)','rgba(16,41,63,0.7)','rgba(37,99,235,0.7)','rgba(124,58,237,0.7)','rgba(255,184,0,0.8)'],borderRadius:6}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'R$'},grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}
+    });
+
+    // Age
+    new Chart(document.getElementById('chartAge'), {
+      type:'bar', data:{labels:['18-24','25-34','35-44','45-54','55-64','65+'],datasets:[
+        {label:'Leads',data:[39,293,453,219,91,35],backgroundColor:'rgba(69,229,229,0.7)',borderRadius:4,yAxisID:'y'},
+        {label:'CPL (R$)',data:[6.83,6.66,6.43,8.11,8.05,9.16],type:'line',borderColor:C.red,backgroundColor:'transparent',pointRadius:5,pointBackgroundColor:C.red,borderWidth:2,yAxisID:'y1'}
+      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:12}}},scales:{y:{position:'left',title:{display:true,text:'Leads'},grid:{color:'#f0f0f0'}},y1:{position:'right',title:{display:true,text:'CPL'},grid:{drawOnChartArea:false},min:0,max:12},x:{grid:{display:false}}}}
+    });
+
+    // Gender
+    new Chart(document.getElementById('chartGender'), {
+      type:'doughnut', data:{labels:['Masculino (968)','Feminino (160)','Desc. (6)'],datasets:[{data:[968,160,6],backgroundColor:[C.navy,C.cyan,'#E5E5E5'],borderWidth:2,borderColor:'#fff'}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{usePointStyle:true,padding:12}}}}
+    });
+
+    // History Charts
+    setTimeout(() => {
+      if (!document.getElementById('chartHistoryLeads')) return;
+      new Chart(document.getElementById('chartHistoryLeads'), {
+        type:'bar', data:{labels:['Captacao Download\n(OG 2022)','[FREE] 05/11\n[LP]','[FREE] Captacao\n09/12','Captacao 05/09\n(v1)','Captacao\nMoto Pecas'],datasets:[{label:'Leads All-Time',data:[7181,3252,2902,2069,1408],backgroundColor:[C.cyan,'rgba(16,41,63,0.8)','rgba(37,99,235,0.7)','rgba(22,163,74,0.7)','rgba(124,58,237,0.7)'],borderRadius:6}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}
+      });
+      new Chart(document.getElementById('chartHistoryCPL'), {
+        type:'bar', data:{labels:['Captacao/Download\n(LP gratis)','Moto Pecas\n(form Meta)','Mercado/Similares\n(LP superm.)','Matcom\n(LP gratis)','VENDAS\n(LP compra)'],datasets:[{label:'CPL Medio (R$)',data:[2.78,4.24,7.82,8.23,52.47],backgroundColor:['rgba(22,163,74,0.7)','rgba(69,229,229,0.7)','rgba(255,184,0,0.7)','rgba(37,99,235,0.7)','rgba(220,38,38,0.7)'],borderRadius:6}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'CPL (R$)'},grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}
+      });
+    }, 100);
+  </script>
+</body>
+</html>

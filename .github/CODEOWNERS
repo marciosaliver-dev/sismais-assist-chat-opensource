@@ -1,0 +1,34 @@
+# CODEOWNERS — SisCRM / Sismais Helpdesk
+# Each line: path pattern → required reviewers
+# Docs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner — all files
+* @marciosaliver-dev
+
+# Core infrastructure — requires lead review
+supabase/functions/ @marciosaliver-dev
+src/integrations/ @marciosaliver-dev
+.github/ @marciosaliver-dev
+
+# AI agents & orchestration — critical path
+supabase/functions/agent-executor/ @marciosaliver-dev
+supabase/functions/orchestrator/ @marciosaliver-dev
+supabase/functions/process-incoming-message/ @marciosaliver-dev
+src/components/agents/ @marciosaliver-dev
+
+# WhatsApp integration — revenue critical
+supabase/functions/uazapi-webhook/ @marciosaliver-dev
+supabase/functions/uazapi-proxy/ @marciosaliver-dev
+src/components/conversation/ @marciosaliver-dev
+
+# Auth & security
+src/contexts/Auth* @marciosaliver-dev
+supabase/functions/sismais-admin-proxy/ @marciosaliver-dev
+
+# Database types — auto-generated, review carefully
+src/integrations/supabase/types.ts @marciosaliver-dev
+
+# Config files — high impact
+tsconfig*.json @marciosaliver-dev
+package.json @marciosaliver-dev
+vite.config.ts @marciosaliver-dev

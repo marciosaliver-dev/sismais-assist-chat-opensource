@@ -1,0 +1,11 @@
+{
+  "title": "✨ Typing Indicator - Experiência WhatsApp Web",
+  "description": "Agora você vê quando o cliente está digitando e ele vê quando a IA está processando",
+  "color": 2930921,
+  "sections": [
+    {"name": "✨ Novidades", "value": "- Typing indicator recebido: exibe \"digitando...\" quando o cliente está escrevendo\n- Typing indicator enviado: cliente vê \"escrevendo\" enquanto IA processa resposta"},
+    {"name": "⚡ Melhorias", "value": "- Interface de channel adapters atualizada para suportar typing indicators\n- Suporte para UAZAPI e Meta WhatsApp Cloud API"},
+    {"name": "🔧 Technical", "value": "- Edge function process-incoming-message atualizada\n- Types TypeScript regenerados com novos campos do banco"}
+  ],
+  "footer": "Helpdesk v3.5.0"
+}

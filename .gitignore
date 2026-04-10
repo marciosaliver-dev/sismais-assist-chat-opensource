@@ -1,0 +1,50 @@
+# Superpowers brainstorm sessions
+.superpowers/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+tools/dev-dashboard/db/*.db
+tools/dev-dashboard/db/*.db-wal
+tools/dev-dashboard/db/*.db-shm
+tools/dev-dashboard/node_modules/
+tools/dev-dashboard/package-lock.json
+
+# Dados de pesquisa e temporários
+.firecrawl/
+supabase/.temp/
+.mcp.json
+.vercel
+
+# Segredos e variáveis de ambiente — NUNCA commitar
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Claude Code / Lovable / ferramentas internas
+.claude/
+.lovable
+.github/workflows/lovable*.yml

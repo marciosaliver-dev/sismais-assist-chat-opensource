@@ -1,0 +1,1 @@
+ALTER TABLE ai_conversations ADD COLUMN IF NOT EXISTS whatsapp_instance_id uuid;

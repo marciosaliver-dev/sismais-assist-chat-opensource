@@ -1,0 +1,110 @@
+name: CI
+
+on:
+  push:
+    branches: [main, claude/**]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-build:
+    name: Lint + TypeScript + Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: TypeScript strict check
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build
+
+  test:
+    name: Tests + Coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Run tests with coverage
+        run: npm run test:coverage
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
+
+  edge-functions-check:
+    name: Edge Functions Syntax
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v1.x
+
+      - name: Check edge functions syntax
+        run: |
+          FAILED=0
+          for dir in supabase/functions/*/; do
+            if [ -f "${dir}index.ts" ]; then
+              echo "Checking ${dir}index.ts..."
+              deno check --no-lock "${dir}index.ts" 2>/dev/null || {
+                echo "ERROR: ${dir}index.ts has type issues"
+                FAILED=1
+              }
+            fi
+          done
+          if [ $FAILED -eq 1 ]; then
+            echo "::warning::Some edge functions have type issues (non-blocking)"
+          fi
+
+  pr-size-check:
+    name: PR Size Guard
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: "Check PR size (Google rule: < 300 lines)"
+        run: |
+          LINES=$(git diff --stat origin/${{ github.base_ref }}...HEAD | tail -1 | grep -oP '\d+(?= insertion)' || echo 0)
+          DELETIONS=$(git diff --stat origin/${{ github.base_ref }}...HEAD | tail -1 | grep -oP '\d+(?= deletion)' || echo 0)
+          TOTAL=$((LINES + DELETIONS))
+          echo "PR size: +${LINES} -${DELETIONS} = ${TOTAL} lines changed"
+          if [ "$TOTAL" -gt 500 ]; then
+            echo "::warning::This PR has ${TOTAL} lines changed. Consider splitting into smaller PRs (< 300 lines recommended)."
+          fi
+          if [ "$TOTAL" -gt 1000 ]; then
+            echo "::error::This PR has ${TOTAL} lines changed. PRs > 1000 lines require justification."
+          fi

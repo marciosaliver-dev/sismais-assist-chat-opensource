@@ -1,0 +1,17 @@
+{
+  "embeds": [{
+    "title": "Deploy — Wizard de Agentes Redesenhado + Central de Conhecimento",
+    "description": "Nova experiência completa para configurar agentes IA com copiloto inteligente, e uma central para alimentar seus agentes com dados da empresa.",
+    "color": 4514021,
+    "fields": [
+      {
+        "name": "✨ Novidades",
+        "value": "🤖 **Wizard de Agentes com 9 Steps** — Agora o modal de edição de agentes tem 9 abas organizadas (Perfil, Comportamento, Modelo, RAG, Skills, Conhecimento, Políticas, Guardrails, Q&A) com indicadores visuais de conclusão em cada etapa.\n\n💬 **Copiloto IA Sempre Visível** — O assistente de configuração agora é um painel fixo à direita com preview ao vivo do agente e sugestões contextuais por etapa. Configure pelo chat ou pelos campos — como preferir.\n\n🏢 **Central de Conhecimento da Empresa** — Nova página /company-knowledge para centralizar todas as fontes de dados: PDFs, sites (scraping), redes sociais, Confluence e Zoho Desk. Seus agentes selecionam quais fontes usar.\n\n🧠 **Memórias de Conversa e Cliente** — O agente executor agora carrega e armazena memórias de conversas anteriores e do perfil do cliente, tornando as respostas mais contextuais.\n\n⏰ **Inatividade Humanizada** — Follow-ups de inatividade agora com timeouts ajustados (10/30/50 min) e mensagens mais naturais e acolhedoras.",
+        "inline": false
+      }
+    ],
+    "footer": {
+      "text": "Sismais Tecnologia • GMS v2.72.0 • Gestão Mais Simples"
+    }
+  }]
+}

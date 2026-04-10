@@ -1,0 +1,2 @@
+INSERT INTO system_updates (title, description, sections, version, published_at) 
+VALUES ('Correção de bug — Busca de CNPJ', 'Agora é possível buscar clientes por CNPJ com ou sem pontuação', '[{"name":"🔧 Correções","items":[{"text":"Corrigida busca de clientes na aba Cliente do Atendimento - CNPJs com pontuação agora são encontrados corretamente","path":null}]}]'::jsonb, '2.57.1', now());

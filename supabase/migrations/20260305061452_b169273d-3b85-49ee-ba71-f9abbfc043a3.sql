@@ -1,0 +1,1 @@
+UPDATE platform_ai_config SET model = 'google/gemini-2.0-flash-001' WHERE feature = 'orchestrator';

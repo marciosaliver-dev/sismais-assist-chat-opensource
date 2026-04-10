@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    { "source": "/adm/:path*", "destination": "/:path*", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/api-docs.html", "destination": "/api-docs.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

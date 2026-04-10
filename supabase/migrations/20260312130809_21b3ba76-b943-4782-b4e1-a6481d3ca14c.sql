@@ -1,0 +1,1 @@
+ALTER TABLE public.ai_agents ADD COLUMN channel_type text NOT NULL DEFAULT 'whatsapp';

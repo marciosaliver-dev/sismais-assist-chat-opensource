@@ -1,0 +1,240 @@
+project_id = "pomueweeulenslxvsxar"
+
+[functions.tv-dashboard-data]
+verify_jwt = false
+
+[functions.firecrawl-scrape]
+verify_jwt = false
+
+[functions.firecrawl-crawl]
+verify_jwt = false
+
+[functions.generate-embedding]
+verify_jwt = false
+
+[functions.semantic-search]
+verify_jwt = false
+
+[functions.whatsapp-meta-webhook]
+verify_jwt = false
+
+[functions.whatsapp-send-message]
+verify_jwt = false
+
+[functions.whatsapp-test-connection]
+verify_jwt = false
+
+[functions.uazapi-proxy]
+verify_jwt = false
+
+[functions.uazapi-webhook]
+verify_jwt = false
+
+[functions.ai-whatsapp-reply]
+verify_jwt = false
+
+[functions.copilot-suggest]
+verify_jwt = false
+
+[functions.sismais-client-lookup]
+verify_jwt = false
+
+[functions.process-incoming-message]
+verify_jwt = false
+
+[functions.message-analyzer]
+verify_jwt = false
+
+[functions.orchestrator]
+verify_jwt = false
+
+[functions.agent-executor]
+verify_jwt = false
+
+[functions.rag-search]
+verify_jwt = false
+
+[functions.learning-loop]
+verify_jwt = false
+
+[functions.knowledge-ingestion]
+verify_jwt = false
+
+[functions.automation-executor]
+verify_jwt = false
+
+[functions.test-automation]
+verify_jwt = false
+
+[functions.calculate-health-scores]
+verify_jwt = false
+
+[functions.generate-report]
+verify_jwt = false
+
+[functions.flow-executor]
+verify_jwt = false
+
+[functions.flow-ai-builder]
+verify_jwt = false
+
+[functions.flow-engine]
+verify_jwt = false
+
+[functions.trigger-flows]
+verify_jwt = false
+
+[functions.link-preview]
+verify_jwt = false
+
+[functions.agent-configurator]
+verify_jwt = false
+
+[functions.summarize-conversation]
+verify_jwt = false
+
+[functions.transcribe-media]
+verify_jwt = false
+
+[functions.webhook-receiver]
+verify_jwt = false
+
+[functions.webhook-sender]
+verify_jwt = false
+
+[functions.sla-alert-check]
+verify_jwt = false
+
+[functions.whatsapp-sync-avatars]
+verify_jwt = false
+
+[functions.list-system-users]
+verify_jwt = false
+
+[functions.enrich-contact]
+verify_jwt = false
+
+[functions.import-chat-history]
+verify_jwt = false
+
+[functions.webhook-billing]
+verify_jwt = false
+
+[functions.platform-ai-assistant]
+verify_jwt = false
+
+[functions.sismais-client-auto-link]
+verify_jwt = false
+
+[functions.sismais-admin-proxy]
+verify_jwt = false
+
+[functions.sincronizar-guru]
+verify_jwt = false
+
+[functions.webhook-guru]
+verify_jwt = false
+
+[functions.openrouter-credits]
+verify_jwt = false
+
+[functions.check-inactive-conversations]
+verify_jwt = false
+# schedule = "*/5 * * * *"  # Not supported by CLI v2, configure via Dashboard
+
+[functions.proactive-campaign-scheduler]
+verify_jwt = false
+# schedule = "*/10 * * * *"  # Not supported by CLI v2, configure via Dashboard
+
+[functions.proactive-campaign-executor]
+verify_jwt = false
+
+[functions.create-system-user]
+verify_jwt = false
+
+[functions.queue-position-notifier]
+verify_jwt = false
+
+[functions.reject-user]
+verify_jwt = false
+
+[functions.approve-user]
+verify_jwt = false
+
+[functions.register-user]
+verify_jwt = false
+
+[functions.generate-manual-content]
+verify_jwt = false
+
+[functions.evaluate-service]
+verify_jwt = false
+
+[functions.api-v1]
+verify_jwt = false
+
+[functions.api-keys-manage]
+verify_jwt = false
+
+[functions.retry-failed-transcriptions]
+verify_jwt = false
+# schedule = "*/5 * * * *"  # Configure via Supabase Dashboard — cron every 5 minutes
+
+[functions.generate-ticket-description]
+verify_jwt = false
+
+[functions.ticket-category-classifier]
+verify_jwt = false
+
+[functions.error-watcher]
+verify_jwt = false
+
+[functions.reconcile-messages]
+verify_jwt = false
+# schedule = "*/10 * * * *"  # Configure via Supabase Dashboard — cron every 10 minutes for dead-letter recovery
+
+[functions.sla-alert-check-cron]
+verify_jwt = false
+# schedule = "*/1 * * * *"  # Configure via Supabase Dashboard — cron every minute for SLA alerts
+
+[functions.kanban-create-ticket]
+verify_jwt = false
+
+[functions.kanban-update-ticket]
+verify_jwt = false
+
+[functions.add-client-note]
+verify_jwt = false
+
+[functions.escalate-to-human]
+verify_jwt = false
+
+[functions.create-reminder]
+verify_jwt = false
+
+[functions.schedule-callback]
+verify_jwt = false
+
+[functions.send-email]
+verify_jwt = false
+
+[functions.knowledge-search]
+verify_jwt = false
+
+[functions.process-proactive-trigger]
+verify_jwt = false
+
+[functions.ai-memory]
+verify_jwt = false
+
+[functions.cto-advisor]
+verify_jwt = false
+
+[functions.fine-tuning-loop]
+verify_jwt = false
+
+[functions.predictive-routing]
+verify_jwt = false
+
+[functions.system-health-monitor]
+verify_jwt = false

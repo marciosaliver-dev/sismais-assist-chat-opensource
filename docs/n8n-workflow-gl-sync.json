@@ -1,0 +1,613 @@
+{
+  "name": "Sync Sismais GL → Supabase (Mais Simples + Maxpro)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 10
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "A cada 10 minutos",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM view_registro_login",
+        "options": {}
+      },
+      "id": "mysql-mais-simples",
+      "name": "MySQL Mais Simples",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [300, 160],
+      "credentials": {
+        "mySql": {
+          "id": "SUBSTITUIR_ID_CREDENTIAL_MAIS_SIMPLES",
+          "name": "MySQL Mais Simples GL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM view_registro_login",
+        "options": {}
+      },
+      "id": "mysql-maxpro",
+      "name": "MySQL Maxpro",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [300, 440],
+      "credentials": {
+        "mySql": {
+          "id": "SUBSTITUIR_ID_CREDENTIAL_MAXPRO",
+          "name": "MySQL Maxpro GL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "src-ms",
+              "name": "source_system",
+              "value": "mais_simples",
+              "type": "string"
+            },
+            {
+              "id": "gl-id-ms",
+              "name": "gl_id",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            },
+            {
+              "id": "nome-ms",
+              "name": "nome",
+              "value": "={{ $json.nome }}",
+              "type": "string"
+            },
+            {
+              "id": "fantasia-ms",
+              "name": "fantasia",
+              "value": "={{ $json.fantasia }}",
+              "type": "string"
+            },
+            {
+              "id": "data-status-ms",
+              "name": "data_status",
+              "value": "={{ $json.data_status }}",
+              "type": "string"
+            },
+            {
+              "id": "cpf-cnpj-ms",
+              "name": "cpf_cnpj",
+              "value": "={{ $json.cpf_cnpj }}",
+              "type": "string"
+            },
+            {
+              "id": "cidade-ms",
+              "name": "cidade",
+              "value": "={{ $json.cidade }}",
+              "type": "string"
+            },
+            {
+              "id": "uf-ms",
+              "name": "uf",
+              "value": "={{ $json.uf }}",
+              "type": "string"
+            },
+            {
+              "id": "tel1-ms",
+              "name": "telefone1",
+              "value": "={{ $json.telefone1 }}",
+              "type": "string"
+            },
+            {
+              "id": "tel2-ms",
+              "name": "telefone2",
+              "value": "={{ $json.telefone2 }}",
+              "type": "string"
+            },
+            {
+              "id": "cel-ms",
+              "name": "celular",
+              "value": "={{ $json.celular }}",
+              "type": "string"
+            },
+            {
+              "id": "email-ms",
+              "name": "email",
+              "value": "={{ $json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "dt-inc-ms",
+              "name": "dt_inclusao",
+              "value": "={{ $json.dt_inclusao }}",
+              "type": "string"
+            },
+            {
+              "id": "segmento-ms",
+              "name": "nome_segmento",
+              "value": "={{ $json.nome_segmento }}",
+              "type": "string"
+            },
+            {
+              "id": "status-ms",
+              "name": "status_pessoa",
+              "value": "={{ $json.status_pessoa }}",
+              "type": "string"
+            },
+            {
+              "id": "status-id-ms",
+              "name": "status_pessoa_id",
+              "value": "={{ $json.status_pessoa_id }}",
+              "type": "number"
+            },
+            {
+              "id": "contato-ms",
+              "name": "contato_principal",
+              "value": "={{ $json.contato_principal }}",
+              "type": "string"
+            },
+            {
+              "id": "sistema-ms",
+              "name": "sistema_utilizado",
+              "value": "={{ $json.sistema_utilizado }}",
+              "type": "string"
+            },
+            {
+              "id": "ult-ver-ms",
+              "name": "ultima_verificacao",
+              "value": "={{ $json.ultima_verificacao }}",
+              "type": "string"
+            },
+            {
+              "id": "dias-inst-ms",
+              "name": "dias_instalacao",
+              "value": "={{ $json.dias_instalacao }}",
+              "type": "number"
+            },
+            {
+              "id": "dias-uv-ms",
+              "name": "dias_ult_ver",
+              "value": "={{ $json.dias_ult_ver }}",
+              "type": "number"
+            },
+            {
+              "id": "dias-uso-ms",
+              "name": "dias_de_uso",
+              "value": "={{ $json.dias_de_uso }}",
+              "type": "number"
+            },
+            {
+              "id": "qtd-login-ms",
+              "name": "qtd_login",
+              "value": "={{ $json.qtd_login }}",
+              "type": "number"
+            },
+            {
+              "id": "empresa-id-ms",
+              "name": "empresa_id",
+              "value": "={{ $json.empresa_id }}",
+              "type": "string"
+            },
+            {
+              "id": "engaj-ms",
+              "name": "engajamento",
+              "value": "={{ $json.engajamento }}",
+              "type": "string"
+            },
+            {
+              "id": "tag-ms",
+              "name": "tag",
+              "value": "={{ $json.tag }}",
+              "type": "string"
+            },
+            {
+              "id": "dt-assin-ms",
+              "name": "dt_inicio_assinatura",
+              "value": "={{ $json.dt_inicio_assinatura }}",
+              "type": "string"
+            },
+            {
+              "id": "id-contato-ac-ms",
+              "name": "id_contato_active",
+              "value": "={{ $json.id_contato_active }}",
+              "type": "number"
+            },
+            {
+              "id": "id-empresa-ac-ms",
+              "name": "id_empresa_active",
+              "value": "={{ $json.id_empresa_active }}",
+              "type": "number"
+            },
+            {
+              "id": "dt-atualiz-ms",
+              "name": "dt_atualizacao",
+              "value": "={{ $json.dt_atualizacao }}",
+              "type": "string"
+            },
+            {
+              "id": "email-val-ms",
+              "name": "email_valido",
+              "value": "={{ $json.email_valido }}",
+              "type": "string"
+            },
+            {
+              "id": "id-sprint-ms",
+              "name": "id_sprinthub",
+              "value": "={{ $json.id_Sprinthub }}",
+              "type": "number"
+            },
+            {
+              "id": "dias-status-ms",
+              "name": "dias_status_atual",
+              "value": "={{ $json.dias_status_atual }}",
+              "type": "number"
+            },
+            {
+              "id": "dias-assin-ms",
+              "name": "dias_assinatura",
+              "value": "={{ $json.dias_assinatura }}",
+              "type": "number"
+            },
+            {
+              "id": "ltv-ms",
+              "name": "ltv_dias",
+              "value": "={{ $json.ltv_dias }}",
+              "type": "number"
+            },
+            {
+              "id": "id-plano-ms",
+              "name": "id_plano",
+              "value": "={{ $json.id_plano }}",
+              "type": "number"
+            },
+            {
+              "id": "id-segmento-ms",
+              "name": "id_segmento",
+              "value": "={{ $json.id_segmento }}",
+              "type": "number"
+            },
+            {
+              "id": "crm-sync-ms",
+              "name": "crm_data_ultima_sicronizacao",
+              "value": "={{ $json.crm_data_ultima_sicronizacao }}",
+              "type": "string"
+            },
+            {
+              "id": "synced-at-ms",
+              "name": "synced_at",
+              "value": "={{ new Date().toISOString() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false
+      },
+      "id": "set-mais-simples",
+      "name": "Mapear Mais Simples",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [560, 160]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "src-mx",
+              "name": "source_system",
+              "value": "maxpro",
+              "type": "string"
+            },
+            {
+              "id": "gl-id-mx",
+              "name": "gl_id",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            },
+            {
+              "id": "nome-mx",
+              "name": "nome",
+              "value": "={{ $json.nome }}",
+              "type": "string"
+            },
+            {
+              "id": "fantasia-mx",
+              "name": "fantasia",
+              "value": "={{ $json.fantasia }}",
+              "type": "string"
+            },
+            {
+              "id": "data-status-mx",
+              "name": "data_status",
+              "value": "={{ $json.data_status }}",
+              "type": "string"
+            },
+            {
+              "id": "cpf-cnpj-mx",
+              "name": "cpf_cnpj",
+              "value": "={{ $json.cpf_cnpj }}",
+              "type": "string"
+            },
+            {
+              "id": "cidade-mx",
+              "name": "cidade",
+              "value": "={{ $json.cidade }}",
+              "type": "string"
+            },
+            {
+              "id": "uf-mx",
+              "name": "uf",
+              "value": "={{ $json.uf }}",
+              "type": "string"
+            },
+            {
+              "id": "tel1-mx",
+              "name": "telefone1",
+              "value": "={{ $json.telefone1 }}",
+              "type": "string"
+            },
+            {
+              "id": "cel-mx",
+              "name": "celular",
+              "value": "={{ $json.celular }}",
+              "type": "string"
+            },
+            {
+              "id": "email-mx",
+              "name": "email",
+              "value": "={{ $json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "dt-inc-mx",
+              "name": "dt_inclusao",
+              "value": "={{ $json.dt_inclusao }}",
+              "type": "string"
+            },
+            {
+              "id": "segmento-mx",
+              "name": "nome_segmento",
+              "value": "={{ $json.nome_segmento }}",
+              "type": "string"
+            },
+            {
+              "id": "status-mx",
+              "name": "status_pessoa",
+              "value": "={{ $json.status_pessoa }}",
+              "type": "string"
+            },
+            {
+              "id": "status-id-mx",
+              "name": "status_pessoa_id",
+              "value": "={{ $json.status_pessoa_id }}",
+              "type": "number"
+            },
+            {
+              "id": "contato-mx",
+              "name": "contato_principal",
+              "value": "={{ $json.contato_principal }}",
+              "type": "string"
+            },
+            {
+              "id": "sistema-mx",
+              "name": "sistema_utilizado",
+              "value": "={{ $json.sistema_utilizado }}",
+              "type": "string"
+            },
+            {
+              "id": "ult-ver-mx",
+              "name": "ultima_verificacao",
+              "value": "={{ $json.ultima_verificacao }}",
+              "type": "string"
+            },
+            {
+              "id": "dias-inst-mx",
+              "name": "dias_instalacao",
+              "value": "={{ $json.dias_instalacao }}",
+              "type": "number"
+            },
+            {
+              "id": "dias-uv-mx",
+              "name": "dias_ult_ver",
+              "value": "={{ $json.dias_ult_ver }}",
+              "type": "number"
+            },
+            {
+              "id": "dias-uso-mx",
+              "name": "dias_de_uso",
+              "value": "={{ $json.dias_de_uso }}",
+              "type": "number"
+            },
+            {
+              "id": "qtd-login-mx",
+              "name": "qtd_login",
+              "value": "={{ $json.qtd_login }}",
+              "type": "number"
+            },
+            {
+              "id": "engaj-mx",
+              "name": "engajamento",
+              "value": "={{ $json.engajamento }}",
+              "type": "string"
+            },
+            {
+              "id": "tag-mx",
+              "name": "tag",
+              "value": "={{ $json.tag }}",
+              "type": "string"
+            },
+            {
+              "id": "dt-assin-mx",
+              "name": "dt_inicio_assinatura",
+              "value": "={{ $json.dt_inicio_assinatura }}",
+              "type": "string"
+            },
+            {
+              "id": "id-contato-ac-mx",
+              "name": "id_contato_active",
+              "value": "={{ $json.id_contato_active }}",
+              "type": "number"
+            },
+            {
+              "id": "id-empresa-ac-mx",
+              "name": "id_empresa_active",
+              "value": "={{ $json.id_empresa_active }}",
+              "type": "number"
+            },
+            {
+              "id": "dt-atualiz-mx",
+              "name": "dt_atualizacao",
+              "value": "={{ $json.dt_atualizacao }}",
+              "type": "string"
+            },
+            {
+              "id": "synced-at-mx",
+              "name": "synced_at",
+              "value": "={{ new Date().toISOString() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false
+      },
+      "id": "set-maxpro",
+      "name": "Mapear Maxpro",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [560, 440]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "tableId": "gl_client_licenses",
+        "columnsToMatchOn": "gl_id,source_system",
+        "columnsToSend": "auto",
+        "options": {}
+      },
+      "id": "supabase-upsert-ms",
+      "name": "Upsert Mais Simples",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1.2,
+      "position": [820, 160],
+      "credentials": {
+        "supabaseApi": {
+          "id": "SUBSTITUIR_ID_CREDENTIAL_SUPABASE",
+          "name": "Supabase Helpdesk"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "tableId": "gl_client_licenses",
+        "columnsToMatchOn": "gl_id,source_system",
+        "columnsToSend": "auto",
+        "options": {}
+      },
+      "id": "supabase-upsert-mx",
+      "name": "Upsert Maxpro",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1.2,
+      "position": [820, 440],
+      "credentials": {
+        "supabaseApi": {
+          "id": "SUBSTITUIR_ID_CREDENTIAL_SUPABASE",
+          "name": "Supabase Helpdesk"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "A cada 10 minutos": {
+      "main": [
+        [
+          {
+            "node": "MySQL Mais Simples",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "MySQL Maxpro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL Mais Simples": {
+      "main": [
+        [
+          {
+            "node": "Mapear Mais Simples",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL Maxpro": {
+      "main": [
+        [
+          {
+            "node": "Mapear Maxpro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mapear Mais Simples": {
+      "main": [
+        [
+          {
+            "node": "Upsert Mais Simples",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mapear Maxpro": {
+      "main": [
+        [
+          {
+            "node": "Upsert Maxpro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "sync",
+      "id": "sync"
+    },
+    {
+      "name": "gl",
+      "id": "gl"
+    }
+  ]
+}

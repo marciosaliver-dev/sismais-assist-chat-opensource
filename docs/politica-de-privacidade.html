@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Privacidade — Sismais Tecnologia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #F8FAFC;
+      color: #333333;
+      line-height: 1.7;
+    }
+
+    /* Topbar */
+    .topbar {
+      height: 52px;
+      background: #10293F;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .tb-logo { display: flex; align-items: center; gap: 8px; }
+    .tb-logo-mark {
+      background: #45E5E5; color: #10293F;
+      font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 13px;
+      padding: 3px 7px; border-radius: 4px; letter-spacing: 0.5px;
+    }
+    .tb-logo-text {
+      color: #fff; font-family: 'Poppins', sans-serif;
+      font-size: 13px; font-weight: 500; opacity: 0.9;
+    }
+    .tb-title {
+      color: rgba(255,255,255,0.7); font-size: 13px; margin-left: auto;
+    }
+
+    /* Container */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* Header */
+    .doc-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 2px solid #E5E5E5;
+    }
+    .doc-header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #10293F;
+      margin-bottom: 8px;
+    }
+    .doc-header .subtitle {
+      font-size: 15px;
+      color: #666666;
+      margin-bottom: 16px;
+    }
+    .doc-header .update-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #E8F9F9;
+      color: #10293F;
+      border: 1px solid rgba(69,229,229,0.4);
+    }
+
+    /* Sections */
+    h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #10293F;
+      margin: 40px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #45E5E5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h2 .num {
+      background: #10293F;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #10293F;
+      margin: 24px 0 10px;
+    }
+
+    p {
+      margin-bottom: 14px;
+      font-size: 14px;
+    }
+
+    ul, ol {
+      margin: 0 0 16px 20px;
+      font-size: 14px;
+    }
+    li {
+      margin-bottom: 6px;
+    }
+
+    /* Info cards */
+    .info-card {
+      background: #fff;
+      border: 1px solid #E5E5E5;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      box-shadow: 0 1px 3px rgba(16,41,63,0.06);
+    }
+    .info-card.highlight {
+      border-left: 3px solid #45E5E5;
+    }
+    .info-card.warning {
+      border-left: 3px solid #FFB800;
+      background: #FFFBEB;
+    }
+    .info-card strong {
+      color: #10293F;
+    }
+
+    /* Table */
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid #E5E5E5;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      font-size: 13px;
+    }
+    thead { background: #10293F; }
+    th {
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    tbody tr { border-bottom: 1px solid #F0F0F0; }
+    tbody tr:hover { background: #F8FAFC; }
+    td { padding: 10px 14px; color: #333; }
+
+    /* Contact card */
+    .contact-card {
+      background: #10293F;
+      color: #fff;
+      border-radius: 12px;
+      padding: 28px 32px;
+      margin: 32px 0;
+      box-shadow: 0 4px 14px rgba(16,41,63,0.2);
+    }
+    .contact-card h3 {
+      color: #45E5E5;
+      font-family: 'Poppins', sans-serif;
+      margin-top: 0;
+      font-size: 16px;
+    }
+    .contact-card p {
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 8px;
+    }
+    .contact-card a {
+      color: #45E5E5;
+      text-decoration: none;
+    }
+    .contact-card a:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer */
+    .doc-footer {
+      text-align: center;
+      padding: 32px 0;
+      border-top: 1px solid #E5E5E5;
+      margin-top: 48px;
+      color: #666;
+      font-size: 12px;
+    }
+    .doc-footer .logo-footer {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      color: #10293F;
+      font-size: 14px;
+    }
+    .doc-footer .logo-footer span {
+      background: #45E5E5;
+      color: #10293F;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    a { color: #2563EB; }
+    a:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 60px; }
+      .doc-header h1 { font-size: 22px; }
+      h2 { font-size: 16px; }
+      .contact-card { padding: 20px; }
+    }
+
+    @media print {
+      .topbar { display: none; }
+      body { background: #fff; }
+      .container { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-logo">
+    <span class="tb-logo-mark">GMS</span>
+    <span class="tb-logo-text">Gestão Mais Simples</span>
+  </div>
+  <span class="tb-title">Política de Privacidade</span>
+</header>
+
+<div class="container">
+
+  <div class="doc-header">
+    <h1>Política de Privacidade</h1>
+    <p class="subtitle">Sismais Tecnologia — Plataforma GMS (Gestão Mais Simples)</p>
+    <span class="update-badge">Última atualização: 1 de abril de 2026</span>
+  </div>
+
+  <p>
+    A <strong>Sismais Tecnologia LTDA</strong> ("nós", "nosso" ou "Sismais") valoriza a privacidade e a proteção dos dados pessoais dos seus usuários. Esta Política de Privacidade descreve como coletamos, usamos, armazenamos, compartilhamos e protegemos as informações pessoais obtidas por meio da plataforma <strong>GMS — Gestão Mais Simples</strong>, incluindo nossos canais de atendimento via WhatsApp, site, aplicativos e integrações com serviços de terceiros.
+  </p>
+  <p>
+    Ao utilizar nossos serviços, você concorda com as práticas descritas nesta política, em conformidade com a <strong>Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018)</strong> e com as políticas da <strong>Meta Platforms, Inc.</strong> para uso da API do WhatsApp Business.
+  </p>
+
+  <!-- 1. Dados Coletados -->
+  <h2><span class="num">1</span> Dados que Coletamos</h2>
+
+  <h3>1.1 Dados fornecidos diretamente por você</h3>
+  <ul>
+    <li><strong>Dados de identificação:</strong> nome, sobrenome, CPF/CNPJ, razão social</li>
+    <li><strong>Dados de contato:</strong> número de telefone (WhatsApp), e-mail, endereço</li>
+    <li><strong>Dados de atendimento:</strong> mensagens de texto, áudios, imagens e documentos enviados via WhatsApp ou outros canais de suporte</li>
+    <li><strong>Dados contratuais:</strong> informações sobre contratos, licenças de software e planos contratados</li>
+    <li><strong>Dados de feedback:</strong> avaliações de atendimento, pesquisas de satisfação</li>
+  </ul>
+
+  <h3>1.2 Dados coletados automaticamente</h3>
+  <ul>
+    <li><strong>Dados de uso:</strong> páginas acessadas, funcionalidades utilizadas, horários de acesso, duração das sessões</li>
+    <li><strong>Dados do dispositivo:</strong> tipo de navegador, sistema operacional, resolução de tela, endereço IP</li>
+    <li><strong>Dados de WhatsApp:</strong> número de telefone, nome de perfil, foto de perfil (quando disponível publicamente), status de leitura de mensagens</li>
+    <li><strong>Cookies e tecnologias similares:</strong> identificadores de sessão, preferências de interface</li>
+  </ul>
+
+  <h3>1.3 Dados obtidos de fontes de terceiros</h3>
+  <ul>
+    <li><strong>Meta / WhatsApp Business API:</strong> dados de perfil e mensagens recebidas via API oficial do WhatsApp</li>
+    <li><strong>Sistemas integrados (Sismais GL / Sismais Admin):</strong> dados cadastrais de clientes, contratos ativos, status de licenças</li>
+  </ul>
+
+  <!-- 2. Como Usamos -->
+  <h2><span class="num">2</span> Como Usamos seus Dados</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Finalidade</th>
+          <th>Base Legal (LGPD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Prestar atendimento ao cliente via WhatsApp e outros canais</td>
+          <td>Execução de contrato (Art. 7º, V)</td>
+        </tr>
+        <tr>
+          <td>Processar mensagens com agentes de Inteligência Artificial para agilizar o suporte</td>
+          <td>Legítimo interesse (Art. 7º, IX)</td>
+        </tr>
+        <tr>
+          <td>Consultar base de conhecimento (RAG) para fornecer respostas precisas</td>
+          <td>Legítimo interesse (Art. 7º, IX)</td>
+        </tr>
+        <tr>
+          <td>Direcionar atendimentos para agentes humanos quando necessário</td>
+          <td>Execução de contrato (Art. 7º, V)</td>
+        </tr>
+        <tr>
+          <td>Gerar métricas e relatórios internos de qualidade de atendimento</td>
+          <td>Legítimo interesse (Art. 7º, IX)</td>
+        </tr>
+        <tr>
+          <td>Enviar notificações operacionais (status de tickets, atualizações de suporte)</td>
+          <td>Execução de contrato (Art. 7º, V)</td>
+        </tr>
+        <tr>
+          <td>Melhorar continuamente nossos serviços e treinar modelos de IA</td>
+          <td>Legítimo interesse (Art. 7º, IX)</td>
+        </tr>
+        <tr>
+          <td>Cumprir obrigações legais e regulatórias</td>
+          <td>Obrigação legal (Art. 7º, II)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-card highlight">
+    <strong>Sobre o uso de Inteligência Artificial:</strong> Utilizamos agentes de IA para processar mensagens e fornecer respostas automatizadas. A IA consulta uma base de conhecimento interna (RAG — Retrieval-Augmented Generation) e pode escalar o atendimento para um agente humano quando a confiança na resposta é insuficiente. Nenhuma decisão automatizada com efeitos legais é tomada sem supervisão humana.
+  </div>
+
+  <!-- 3. Compartilhamento -->
+  <h2><span class="num">3</span> Compartilhamento de Dados</h2>
+
+  <p>Seus dados pessoais podem ser compartilhados com:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Destinatário</th>
+          <th>Finalidade</th>
+          <th>Dados compartilhados</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Meta Platforms (WhatsApp)</strong></td>
+          <td>Envio e recebimento de mensagens via API oficial</td>
+          <td>Número de telefone, conteúdo de mensagens</td>
+        </tr>
+        <tr>
+          <td><strong>Provedores de IA</strong> (OpenRouter, OpenAI)</td>
+          <td>Processamento de linguagem natural e geração de embeddings</td>
+          <td>Conteúdo textual de mensagens (anonimizado quando possível)</td>
+        </tr>
+        <tr>
+          <td><strong>Supabase</strong></td>
+          <td>Armazenamento seguro de dados e autenticação</td>
+          <td>Todos os dados da plataforma (com criptografia)</td>
+        </tr>
+        <tr>
+          <td><strong>Autoridades competentes</strong></td>
+          <td>Cumprimento de obrigações legais</td>
+          <td>Conforme exigido por lei</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>Não vendemos, alugamos ou comercializamos seus dados pessoais com terceiros para fins de marketing.</strong></p>
+
+  <!-- 4. Armazenamento e Segurança -->
+  <h2><span class="num">4</span> Armazenamento e Segurança</h2>
+
+  <ul>
+    <li><strong>Infraestrutura:</strong> Os dados são armazenados em servidores seguros da Supabase (PostgreSQL), com criptografia em trânsito (TLS/SSL) e em repouso</li>
+    <li><strong>Controle de acesso:</strong> Políticas de Row Level Security (RLS) garantem que cada usuário acessa apenas seus próprios dados</li>
+    <li><strong>Autenticação:</strong> Acesso à plataforma protegido por autenticação segura com tokens JWT</li>
+    <li><strong>Retenção:</strong> Dados são mantidos pelo período necessário para cumprir as finalidades descritas nesta política ou conforme exigido por lei</li>
+    <li><strong>Backups:</strong> Realizados periodicamente com criptografia</li>
+  </ul>
+
+  <div class="info-card warning">
+    <strong>Importante:</strong> Embora adotemos medidas de segurança compatíveis com os padrões da indústria, nenhum sistema é 100% infalível. Em caso de incidente de segurança, notificaremos os titulares afetados e a ANPD conforme exigido pela LGPD.
+  </div>
+
+  <!-- 5. Seus Direitos -->
+  <h2><span class="num">5</span> Seus Direitos (LGPD)</h2>
+
+  <p>Como titular de dados pessoais, você tem direito a:</p>
+
+  <ul>
+    <li><strong>Confirmação e acesso:</strong> Saber se tratamos seus dados e acessar uma cópia</li>
+    <li><strong>Correção:</strong> Solicitar a correção de dados incompletos, inexatos ou desatualizados</li>
+    <li><strong>Anonimização, bloqueio ou eliminação:</strong> Solicitar o tratamento adequado de dados desnecessários ou excessivos</li>
+    <li><strong>Portabilidade:</strong> Solicitar a transferência dos seus dados a outro fornecedor</li>
+    <li><strong>Eliminação:</strong> Solicitar a exclusão dos dados pessoais tratados com base no seu consentimento</li>
+    <li><strong>Informação sobre compartilhamento:</strong> Saber com quais entidades seus dados foram compartilhados</li>
+    <li><strong>Revogação do consentimento:</strong> Retirar seu consentimento a qualquer momento</li>
+    <li><strong>Oposição:</strong> Opor-se ao tratamento realizado com base em legítimo interesse</li>
+  </ul>
+
+  <!-- 6. Como Exercer -->
+  <h2><span class="num">6</span> Como Exercer seus Direitos</h2>
+
+  <p>Para exercer qualquer um dos direitos acima ou solicitar a <strong>exclusão dos seus dados</strong>, entre em contato conosco:</p>
+
+  <div class="contact-card">
+    <h3>Canal de Privacidade — Sismais Tecnologia</h3>
+    <p><strong>E-mail:</strong> <a href="mailto:marcio.saraiva@sismais.com">marcio.saraiva@sismais.com</a></p>
+    <p><strong>WhatsApp:</strong> <a href="https://wa.me/5577981210924">+55 (77) 98121-0924</a></p>
+    <p><strong>Prazo de resposta:</strong> Até 15 dias úteis, conforme Art. 18 da LGPD</p>
+  </div>
+
+  <p>Ao receber sua solicitação, poderemos solicitar informações adicionais para confirmar sua identidade antes de processar o pedido.</p>
+
+  <!-- 7. Cookies -->
+  <h2><span class="num">7</span> Cookies e Tecnologias de Rastreamento</h2>
+
+  <p>Utilizamos cookies estritamente necessários para o funcionamento da plataforma:</p>
+  <ul>
+    <li><strong>Cookies de sessão:</strong> Para manter sua autenticação ativa</li>
+    <li><strong>Cookies de preferência:</strong> Para armazenar configurações de interface (tema, idioma)</li>
+  </ul>
+  <p>Não utilizamos cookies de rastreamento para fins publicitários de terceiros.</p>
+
+  <!-- 8. WhatsApp -->
+  <h2><span class="num">8</span> Uso da API do WhatsApp Business</h2>
+
+  <p>Nosso serviço de atendimento via WhatsApp opera por meio da <strong>API oficial do WhatsApp Business</strong> fornecida pela Meta Platforms, Inc. Ao nos enviar uma mensagem via WhatsApp, você concorda que:</p>
+
+  <ul>
+    <li>Seu número de telefone e conteúdo das mensagens serão processados pela plataforma Sismais para fins de atendimento</li>
+    <li>Mensagens poderão ser processadas por agentes de Inteligência Artificial antes de serem respondidas</li>
+    <li>Dados são transmitidos de forma criptografada entre o WhatsApp e nossa plataforma</li>
+    <li>Você pode solicitar a exclusão do seu histórico de conversas a qualquer momento pelo canal de privacidade</li>
+  </ul>
+
+  <p>Para mais informações sobre como a Meta trata seus dados, consulte a <a href="https://www.whatsapp.com/legal/privacy-policy" target="_blank" rel="noopener">Política de Privacidade do WhatsApp</a>.</p>
+
+  <!-- 9. Menores -->
+  <h2><span class="num">9</span> Dados de Menores de Idade</h2>
+
+  <p>Nossos serviços são destinados a empresas e profissionais (B2B). Não coletamos intencionalmente dados de menores de 18 anos. Caso identifiquemos dados de menores, estes serão eliminados imediatamente.</p>
+
+  <!-- 10. Transferência Internacional -->
+  <h2><span class="num">10</span> Transferência Internacional de Dados</h2>
+
+  <p>Alguns dos nossos provedores de serviço (como Supabase, OpenAI e Meta) podem armazenar ou processar dados fora do Brasil. Nestes casos, garantimos que a transferência ocorre em conformidade com a LGPD, mediante cláusulas contratuais padrão ou para países com nível adequado de proteção de dados reconhecido pela ANPD.</p>
+
+  <!-- 11. Alterações -->
+  <h2><span class="num">11</span> Alterações nesta Política</h2>
+
+  <p>Podemos atualizar esta Política de Privacidade periodicamente. Alterações significativas serão comunicadas por meio da plataforma ou pelos nossos canais de atendimento. A data da última atualização está indicada no topo deste documento.</p>
+
+  <p>Recomendamos que você revise esta política periodicamente para estar ciente de quaisquer mudanças.</p>
+
+  <!-- 12. Contato DPO -->
+  <h2><span class="num">12</span> Encarregado de Proteção de Dados (DPO)</h2>
+
+  <div class="contact-card">
+    <h3>Encarregado de Dados — Sismais Tecnologia LTDA</h3>
+    <p><strong>Nome:</strong> Márcio Saraiva</p>
+    <p><strong>E-mail:</strong> <a href="mailto:marcio.saraiva@sismais.com">marcio.saraiva@sismais.com</a></p>
+    <p>O encarregado é responsável por aceitar reclamações e comunicações dos titulares, prestar esclarecimentos e adotar providências conforme a LGPD.</p>
+  </div>
+
+  <!-- Footer -->
+  <div class="doc-footer">
+    <div class="logo-footer">
+      <span>GMS</span> Gestão Mais Simples
+    </div>
+    <p>&copy; 2026 Sismais Tecnologia. Todos os direitos reservados.</p>
+    <p>Este documento é parte integrante dos Termos de Uso da plataforma GMS.</p>
+  </div>
+
+</div>
+
+</body>
+</html>

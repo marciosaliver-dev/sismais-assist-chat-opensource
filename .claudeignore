@@ -1,0 +1,40 @@
+# Dependências
+node_modules/
+
+# Build output
+dist/
+
+# Lock files
+bun.lock
+deno.lock
+package-lock.json
+
+# Git
+.git/
+
+# Worktrees e playwright cache
+.claude/worktrees/
+.playwright-mcp/
+
+# Assets binários (imagens)
+docs/assets/*.png
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ico
+*.svg
+*.webp
+
+# Reports HTML (pesados, raramente editados)
+docs/reports/*.html
+
+# Superpowers plans/specs (contexto externo)
+docs/superpowers/
+
+# Source maps
+*.map
+
+# Minified files
+*.min.js
+*.min.css

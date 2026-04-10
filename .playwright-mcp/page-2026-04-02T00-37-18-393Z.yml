@@ -1,0 +1,58 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "ExpxAgents" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - img [ref=e8]
+        - generic [ref=e10]: ExpxAgents
+      - generic [ref=e12]:
+        - img [ref=e13]
+        - textbox "Search squads..." [ref=e15]
+        - generic [ref=e16]: Ctrl K
+      - navigation [ref=e17]:
+        - link "Marketplace" [ref=e18] [cursor=pointer]:
+          - /url: /browse
+  - main [ref=e19]:
+    - generic [ref=e22]:
+      - generic [ref=e23]:
+        - generic [ref=e26]: v0.1.0 — Now Available
+        - heading "AI Squad Marketplace" [level=1] [ref=e27]
+        - paragraph [ref=e28]: Discover, install, and deploy pre-built AI agent squads. One command to add a team of AI agents to your project.
+        - generic [ref=e29]:
+          - img [ref=e30]
+          - textbox "Search squads..." [ref=e32]
+        - generic [ref=e33]:
+          - generic [ref=e34]: $
+          - code [ref=e35]: expxagents add @scope/squad-name
+      - generic [ref=e37]:
+        - generic [ref=e43]:
+          - img [ref=e44]
+          - text: squad.config.ts
+        - generic [ref=e46]:
+          - generic [ref=e47]: // Configure your AI squad
+          - generic [ref=e48]:
+            - text: import
+            - generic [ref=e49]: "{"
+            - text: createSquad
+            - generic [ref=e50]: "}"
+            - text: from '@expxagents/sdk'
+          - generic [ref=e52]: "const support = createSquad({"
+          - generic [ref=e53]: "name: 'customer-support',"
+          - generic [ref=e54]: "agents: ["
+          - generic [ref=e55]: "'intent-classifier',"
+          - generic [ref=e56]: "'knowledge-retriever',"
+          - generic [ref=e57]: "'response-generator',"
+          - generic [ref=e58]: "],"
+          - generic [ref=e59]: "model: 'claude-opus-4-6',"
+          - generic [ref=e60]: "})"
+          - generic [ref=e62]: await support.deploy()
+    - heading "Browse by Category" [level=2] [ref=e65]
+    - heading "Popular Squads" [level=2] [ref=e100]
+  - contentinfo [ref=e168]:
+    - generic [ref=e169]:
+      - generic [ref=e170]: ExpxAgents Registry v0.1.0
+      - generic [ref=e171]:
+        - link "Docs" [ref=e172] [cursor=pointer]:
+          - /url: "#"
+        - link "GitHub" [ref=e173] [cursor=pointer]:
+          - /url: "#"

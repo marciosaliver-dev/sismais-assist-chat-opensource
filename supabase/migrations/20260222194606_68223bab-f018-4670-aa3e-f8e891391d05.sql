@@ -1,0 +1,1 @@
+UPDATE ai_conversations SET status = 'em_atendimento' WHERE status = 'em_andamento';

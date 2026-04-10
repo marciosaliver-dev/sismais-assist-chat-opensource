@@ -1,0 +1,23 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "ExpxAgents" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - img [ref=e8]
+        - generic [ref=e10]: ExpxAgents
+      - generic [ref=e12]:
+        - img [ref=e13]
+        - textbox "Search squads..." [ref=e15]
+        - generic [ref=e16]: Ctrl K
+      - navigation [ref=e17]:
+        - link "Marketplace" [ref=e18] [cursor=pointer]:
+          - /url: /browse
+  - main [ref=e19]
+  - contentinfo [ref=e22]:
+    - generic [ref=e23]:
+      - generic [ref=e24]: ExpxAgents Registry v0.1.0
+      - generic [ref=e25]:
+        - link "Docs" [ref=e26] [cursor=pointer]:
+          - /url: "#"
+        - link "GitHub" [ref=e27] [cursor=pointer]:
+          - /url: "#"

@@ -1,0 +1,1 @@
+ALTER TABLE ai_automations ADD COLUMN IF NOT EXISTS category text DEFAULT 'ticket';
